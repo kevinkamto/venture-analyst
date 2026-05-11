@@ -17,7 +17,7 @@ const STATUS_COLORS: Record<AgentStatus, string> = {
   idle: "text-[#484F58] border-[#21262D]",
   thinking: "text-[#388BFD] border-[#388BFD]/40",
   active: "text-[#00FF88] border-[#00FF88]/40",
-  complete: "text-[#8B949E] border-[#8B949E]/40",
+  complete: "text-[#56D364] border-[#56D364]/40",
   error: "text-[#F85149] border-[#F85149]/40",
 };
 
@@ -33,7 +33,7 @@ const STATUS_DOT: Record<AgentStatus, string> = {
   idle: "bg-[#484F58]",
   thinking: "bg-[#388BFD] animate-pulse",
   active: "bg-[#00FF88] animate-pulse",
-  complete: "bg-[#8B949E]",
+  complete: "bg-[#56D364]",
   error: "bg-[#F85149]",
 };
 
@@ -165,7 +165,7 @@ export function AgentCard({ agent, fill }: Props) {
       : status === "thinking"
         ? "border-[#388BFD]/30 shadow-[0_0_16px_#388BFD15]"
         : status === "complete"
-          ? "border-[#8B949E]/20"
+          ? "border-[#56D364]/20"
           : status === "error"
             ? "border-[#F85149]/30"
             : "border-[#21262D]";
