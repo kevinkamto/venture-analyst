@@ -227,7 +227,7 @@ export function AgentCard({ agent, fill }: Props) {
               <CardContent className="px-4 pb-3 flex-1 min-h-0 flex flex-col overflow-hidden">
                 {/* Tool calls */}
                 {toolCalls.length > 0 && (
-                  <div className="max-h-16 overflow-y-auto flex-none">
+                  <div className="max-h-16 overflow-y-auto flex-none border-b border-[#21262D] pb-2 mb-2">
                     {toolCalls.map((tc, i) => (
                       <div
                         key={i}
