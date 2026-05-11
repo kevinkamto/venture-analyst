@@ -106,16 +106,18 @@ function ValidateDashboard() {
           transition={{ delay: 0.2 }}
           className="min-h-0 overflow-y-auto flex flex-col gap-3"
         >
-          {PARALLEL_AGENTS.map((agent, i) => (
-            <motion.div
-              key={agent}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 + i * 0.08 }}
-            >
-              <AgentCard agent={agent} />
-            </motion.div>
-          ))}
+          <div className="grid grid-cols-1 gap-3 p-1 md:grid-cols-2">
+            {PARALLEL_AGENTS.map((agent, i) => (
+              <motion.div
+                key={agent}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + i * 0.08 }}
+              >
+                <AgentCard agent={agent} />
+              </motion.div>
+            ))}
+          </div>
 
           <SynthesisPanel />
         </motion.div>
