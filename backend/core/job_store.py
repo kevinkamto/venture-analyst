@@ -2,7 +2,7 @@ import asyncio
 from typing import Any, cast
 from uuid import uuid4
 
-from schemas.responses import ValidationResult
+from backend.schemas.responses import ValidationResult
 
 jobs: dict[str, dict[str, Any]] = {}
 

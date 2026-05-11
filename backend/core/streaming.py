@@ -5,7 +5,7 @@ from typing import Any
 
 from loguru import logger
 
-from schemas.events import AgentEvent
+from backend.schemas.events import AgentEvent
 
 
 async def event_generator(

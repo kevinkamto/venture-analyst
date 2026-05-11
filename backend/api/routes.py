@@ -3,12 +3,13 @@ from typing import Any
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from loguru import logger
+from backend.core import job_store
 from sse_starlette.sse import EventSourceResponse
 
-from core import job_store, orchestrator
-from core.streaming import event_generator
-from schemas.requests import ValidateRequest
-from schemas.responses import ValidationResult
+from backend.core import orchestrator
+from backend.core.streaming import event_generator
+from backend.schemas.requests import ValidateRequest
+from backend.schemas.responses import ValidationResult
 
 router = APIRouter()
 

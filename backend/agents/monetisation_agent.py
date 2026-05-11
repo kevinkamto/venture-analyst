@@ -3,8 +3,8 @@ from typing import Any
 
 from loguru import logger
 
-from agents.base import emit, stream_llm
-from schemas.events import AgentName
+from backend.agents.base import emit, stream_llm
+from backend.schemas.events import AgentName
 
 SYSTEM_PROMPT = """You are a monetisation strategy expert specializing in SaaS, marketplaces, and tech startups.
 Analyze the startup idea and provide a comprehensive monetisation strategy covering:
@@ -42,8 +42,7 @@ async def run_monetisation_agent(idea: str, queue: asyncio.Queue[Any]) -> str:
     logger.info(f"[{AGENT}] starting")
     try:
         await emit(
-            queue, AGENT, "thinking",
-            "Designing revenue model and pricing strategy..."
+            queue, AGENT, "thinking", "Designing revenue model and pricing strategy..."
         )
 
         user_prompt = f"Startup idea: {idea}\n\nProvide a full monetisation strategy."

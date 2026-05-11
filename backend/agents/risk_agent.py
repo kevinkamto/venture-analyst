@@ -3,8 +3,8 @@ from typing import Any
 
 from loguru import logger
 
-from agents.base import emit, stream_llm
-from schemas.events import AgentName
+from backend.agents.base import emit, stream_llm
+from backend.schemas.events import AgentName
 
 SYSTEM_PROMPT = """You are a startup risk assessment specialist.
 Analyze the startup idea and identify all material risks across four dimensions:
@@ -38,8 +38,10 @@ async def run_risk_agent(idea: str, queue: asyncio.Queue[Any]) -> str:
     logger.info(f"[{AGENT}] starting")
     try:
         await emit(
-            queue, AGENT, "thinking",
-            "Assessing legal, technical, market, and execution risks..."
+            queue,
+            AGENT,
+            "thinking",
+            "Assessing legal, technical, market, and execution risks...",
         )
 
         user_prompt = f"Startup idea: {idea}\n\nProvide a full risk assessment."

@@ -3,19 +3,17 @@ from typing import Any
 
 from loguru import logger
 
-from agents.competitor_agent import run_competitor_agent
-from agents.market_agent import run_market_agent
-from agents.monetisation_agent import run_monetisation_agent
-from agents.risk_agent import run_risk_agent
-from agents.synthesis_agent import run_synthesis_agent
-from core import job_store
-from schemas.events import AgentEvent
-from schemas.responses import ValidationResult
+from backend.agents.competitor_agent import run_competitor_agent
+from backend.agents.market_agent import run_market_agent
+from backend.agents.monetisation_agent import run_monetisation_agent
+from backend.agents.risk_agent import run_risk_agent
+from backend.agents.synthesis_agent import run_synthesis_agent
+from backend.core import job_store
+from backend.schemas.events import AgentEvent
+from backend.schemas.responses import ValidationResult
 
 
-async def run_validation(
-    idea: str, job_id: str, queue: asyncio.Queue[Any]
-) -> None:
+async def run_validation(idea: str, job_id: str, queue: asyncio.Queue[Any]) -> None:
     logger.info(f"[orchestrator] starting job {job_id}")
     try:
         # Run 4 agents in parallel

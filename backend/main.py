@@ -6,7 +6,7 @@ from fastapi import FastAPI  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 from loguru import logger  # noqa: E402
 
-from api.routes import router  # noqa: E402
+from backend.api.routes import router  # noqa: E402
 
 logger.add("logs/app.log", rotation="10 MB", retention="7 days", level="INFO")
 

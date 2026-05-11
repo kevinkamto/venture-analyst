@@ -3,8 +3,8 @@ from typing import Any
 
 from loguru import logger
 
-from agents.base import emit, stream_llm_with_search
-from schemas.events import AgentName
+from backend.agents.base import emit, stream_llm_with_search
+from backend.schemas.events import AgentName
 
 SYSTEM_PROMPT = """You are a senior market research analyst specializing in startup evaluation.
 Analyze the startup idea and provide a comprehensive market analysis covering:
@@ -24,7 +24,9 @@ AGENT: AgentName = "market_research"
 async def run_market_agent(idea: str, queue: asyncio.Queue[Any]) -> str:
     logger.info(f"[{AGENT}] starting")
     try:
-        await emit(queue, AGENT, "thinking", "Researching market size, TAM, and trends...")
+        await emit(
+            queue, AGENT, "thinking", "Researching market size, TAM, and trends..."
+        )
 
         output = await stream_llm_with_search(
             AGENT,

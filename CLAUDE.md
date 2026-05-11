@@ -5,10 +5,10 @@
 **Frontend:** Next.js (App Router) · Turbopack · shadcn/ui · Tailwind · Zustand · Framer Motion
 **Backend:** FastAPI · Uvicorn · Pydantic v2 · OpenAI · SSE-Starlette · Loguru · Ruff · Mypy · Tavily
 
-## Workspace Structure
+## Folder Structure
 
 ```
-workspace/
+/
 ├── frontend/          ← Next.js App Router + Turbopack + shadcn/ui
 └── backend/           ← FastAPI + Pydantic + Ruff + Mypy + Loguru
 ```
@@ -17,7 +17,7 @@ workspace/
 
 ## 1. Backend Setup
 
-### `workspace/backend/`
+### `backend/`
 
 ```
 backend/
@@ -49,7 +49,7 @@ backend/
 ### Install
 
 ```bash
-cd workspace/backend
+cd backend
 uv venv
 uv pip install fastapi uvicorn python-dotenv openai httpx sse-starlette tavily-python "pydantic>=2.0" loguru ruff mypy
 ```
@@ -236,7 +236,7 @@ Use `uuid4` for job IDs.
 
 ## 2. Frontend Setup
 
-### `workspace/frontend/`
+### `frontend/`
 
 ```
 frontend/
@@ -270,7 +270,7 @@ frontend/
 ### Install
 
 ```bash
-cd workspace/frontend
+cd frontend
 pnpm create next-app@latest . --typescript --tailwind --app --turbopack
 pnpm dlx shadcn@latest init
 pnpm dlx shadcn@latest add card badge scroll-area progress separator button textarea
@@ -528,7 +528,7 @@ export const getResult = async (jobId: string): Promise<ResultData>
 
 ### Step 1 — Backend Core
 
-1. Create `workspace/backend/` structure
+1. Create `backend/` structure
 2. Set up `pyproject.toml` with Ruff + Mypy config
 3. Implement `schemas/` (Pydantic models for events, requests, responses)
 4. Implement `main.py` with CORS + Loguru setup
@@ -550,7 +550,7 @@ export const getResult = async (jobId: string): Promise<ResultData>
 
 ### Step 3 — Frontend Foundation
 
-1. Create `workspace/frontend/` with Next.js + Turbopack
+1. Create `frontend/` with Next.js + Turbopack
 2. Run `npx shadcn@latest init` and add required components
 3. Set up Tailwind CSS variables (dark theme)
 4. Implement `store/agentStore.ts` (Zustand)

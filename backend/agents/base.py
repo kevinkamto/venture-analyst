@@ -6,7 +6,7 @@ from loguru import logger
 from openai import AsyncOpenAI
 from tavily import AsyncTavilyClient
 
-from schemas.events import AgentEvent, AgentName
+from backend.schemas.events import AgentEvent, AgentName
 
 _openai_client: AsyncOpenAI | None = None
 _tavily_client: AsyncTavilyClient | None = None
@@ -38,9 +38,7 @@ async def emit(
 
 async def web_search(query: str) -> str:
     result = await get_tavily().search(query, max_results=5)
-    snippets: list[str] = [
-        r.get("content", "") for r in result.get("results", [])
-    ]
+    snippets: list[str] = [r.get("content", "") for r in result.get("results", [])]
     return "\n\n".join(snippets)
 
 

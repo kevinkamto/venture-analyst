@@ -4,8 +4,8 @@ from typing import Any
 
 from loguru import logger
 
-from agents.base import emit, stream_llm
-from schemas.events import AgentName
+from backend.agents.base import emit, stream_llm
+from backend.schemas.events import AgentName
 
 SYSTEM_PROMPT = """You are a senior venture capital analyst synthesizing a comprehensive startup validation report.
 
@@ -72,7 +72,12 @@ async def run_synthesis_agent(
     agent: AgentName = "synthesis"
     logger.info(f"[{agent}] starting")
     try:
-        await emit(queue, agent, "thinking", "Synthesizing all agent outputs into final report...")
+        await emit(
+            queue,
+            agent,
+            "thinking",
+            "Synthesizing all agent outputs into final report...",
+        )
 
         user_prompt = f"""Startup idea: {idea}
 

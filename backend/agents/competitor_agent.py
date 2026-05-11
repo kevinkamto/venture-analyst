@@ -3,8 +3,8 @@ from typing import Any
 
 from loguru import logger
 
-from agents.base import emit, stream_llm_with_search
-from schemas.events import AgentName
+from backend.agents.base import emit, stream_llm_with_search
+from backend.schemas.events import AgentName
 
 SYSTEM_PROMPT = """You are a competitive intelligence analyst specializing in startup ecosystems.
 Analyze the startup idea and provide a comprehensive competitor analysis covering:
