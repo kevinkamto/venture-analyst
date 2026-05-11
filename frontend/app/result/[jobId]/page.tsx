@@ -66,8 +66,14 @@ function FullscreenModal({
       >
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#21262D] flex-none">
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
-            <span className="font-mono text-xs font-bold tracking-widest" style={{ color }}>
+            <span
+              className="h-2 w-2 rounded-full"
+              style={{ backgroundColor: color }}
+            />
+            <span
+              className="font-mono text-xs font-bold tracking-widest"
+              style={{ color }}
+            >
               {label}
             </span>
           </div>
@@ -108,7 +114,7 @@ function ResultSection({
         transition={{ delay }}
       >
         <Card className="border-[#21262D] bg-[#0D1117] h-full">
-          <CardHeader className="pb-2 pt-4 px-5">
+          <CardHeader className="pb-0 pt-0 px-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span
@@ -131,8 +137,8 @@ function ResultSection({
               </button>
             </div>
           </CardHeader>
-          <CardContent className="px-5 pb-5">
-            <div className="max-h-36 overflow-y-auto text-sm text-[#8B949E]">
+          <CardContent className="px-4 pb-1 pt-1">
+            <div className="max-h-24 overflow-y-auto text-xs text-[#8B949E]">
               <Markdown>{content}</Markdown>
             </div>
           </CardContent>
@@ -225,7 +231,7 @@ export default function ResultPage({ params }: Props) {
   ];
 
   return (
-    <div className="h-screen overflow-hidden bg-[#080B0F] flex flex-col px-4 pt-6 pb-4 md:px-8 lg:px-16">
+    <div className="bg-[#080B0F] flex flex-col px-4 pt-6 pb-4 md:px-8 lg:px-16">
       <div className="mx-auto w-full max-w-5xl flex flex-col flex-1 min-h-0">
         {/* Header */}
         <motion.div
@@ -251,7 +257,7 @@ export default function ResultPage({ params }: Props) {
         </div>
 
         {/* Four sections 2x2 + Synthesis — fills remaining height */}
-        <div className="flex-1 min-h-0 overflow-y-auto space-y-4 pb-4">
+        <div className="flex-1 min-h-0 space-y-4 pb-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 p-1">
             {sections.map(({ key, delay }) => (
               <ResultSection
