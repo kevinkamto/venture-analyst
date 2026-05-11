@@ -56,6 +56,7 @@ type Store = {
   setJobId: (id: string) => void;
   setRunning: (v: boolean) => void;
   appendToken: (agent: AgentKey, token: string) => void;
+  appendTokenBatch: (batch: Partial<Record<AgentKey, string>>) => void;
   setStatus: (agent: AgentKey, status: AgentStatus) => void;
   addToolCall: (agent: AgentKey, tool: string) => void;
   addLog: (entry: LogEntry) => void;
@@ -91,6 +92,20 @@ export const useAgentStore = create<Store>((set) => ({
         },
       },
     })),
+
+  appendTokenBatch: (batch) =>
+    set((s) => {
+      const updated: Partial<Record<AgentKey, AgentState>> = {};
+      for (const [key, tokens] of Object.entries(batch) as [AgentKey, string][]) {
+        updated[key] = {
+          ...s.agents[key],
+          output: s.agents[key].output + tokens,
+          tokenCount: s.agents[key].tokenCount + tokens.length,
+          status: "active" as AgentStatus,
+        };
+      }
+      return { agents: { ...s.agents, ...updated } };
+    }),
 
   setStatus: (agent, status) =>
     set((s) => ({

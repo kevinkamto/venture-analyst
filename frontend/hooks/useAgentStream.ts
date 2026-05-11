@@ -23,8 +23,22 @@ const now = () =>
 
 export function useAgentStream(jobId: string | null) {
   const esRef = useRef<EventSource | null>(null);
-  const { appendToken, setStatus, addToolCall, addLog, setRunning } =
+  // Accumulate tokens between flushes to avoid a render per token
+  const tokenBufferRef = useRef<Partial<Record<AgentKey, string>>>({});
+  const { appendTokenBatch, setStatus, addToolCall, addLog, setRunning } =
     useAgentStore();
+
+  // Flush buffered tokens to the store at 50 ms intervals (~20 renders/s max)
+  useEffect(() => {
+    const id = setInterval(() => {
+      const buf = tokenBufferRef.current;
+      const keys = Object.keys(buf) as AgentKey[];
+      if (keys.length === 0) return;
+      tokenBufferRef.current = {};
+      appendTokenBatch(buf);
+    }, 50);
+    return () => clearInterval(id);
+  }, [appendTokenBatch]);
 
   useEffect(() => {
     if (!jobId) return;
@@ -45,12 +59,16 @@ export function useAgentStream(jobId: string | null) {
         const type = event.type;
         const data = event.data;
 
-        addLog({ time: now(), agent: event.agent, type, message: data });
+        // Tokens are too frequent to log individually — skip them
+        if (type !== "token") {
+          addLog({ time: now(), agent: event.agent, type, message: data });
+        }
 
         if (type === "thinking") {
           setStatus(agent, "thinking");
         } else if (type === "token") {
-          appendToken(agent, data);
+          tokenBufferRef.current[agent] =
+            (tokenBufferRef.current[agent] ?? "") + data;
         } else if (type === "tool_call") {
           addToolCall(agent, data);
         } else if (type === "complete") {
@@ -65,7 +83,6 @@ export function useAgentStream(jobId: string | null) {
 
       es.onerror = () => {
         es.close();
-        // Reconnect after 2 s if still running
         const store = useAgentStore.getState();
         if (store.isRunning) {
           setTimeout(connect, 2000);
@@ -79,5 +96,5 @@ export function useAgentStream(jobId: string | null) {
     return () => {
       esRef.current?.close();
     };
-  }, [jobId, appendToken, setStatus, addToolCall, addLog, setRunning]);
+  }, [jobId, appendTokenBatch, setStatus, addToolCall, addLog, setRunning]);
 }
