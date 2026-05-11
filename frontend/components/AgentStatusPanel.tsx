@@ -101,7 +101,7 @@ export function AgentStatusPanel() {
   const allKeys: AgentKey[] = [...PARALLEL_AGENTS, "synthesis"];
 
   return (
-    <div className="rounded-lg border border-[#21262D] bg-[#0D1117]">
+    <div className="h-full rounded-lg border border-[#21262D] bg-[#0D1117]">
       <div className="flex items-center justify-between border-b border-[#21262D] px-4 py-2.5">
         <span className="font-mono text-[11px] font-semibold text-[#8B949E] tracking-wider">
           ACTIVE AGENTS

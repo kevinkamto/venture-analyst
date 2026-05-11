@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { AgentCard } from "@/components/AgentCard";
 import { LogPanel } from "@/components/LogPanel";
 import { AgentStatusPanel } from "@/components/AgentStatusPanel";
-import { SynthesisPanel } from "@/components/SynthesisPanel";
 import { useAgentStream } from "@/hooks/useAgentStream";
 import { useAgentStore, PARALLEL_AGENTS } from "@/store/agentStore";
 
@@ -94,7 +93,7 @@ function ValidateDashboard() {
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="overflow-y-auto"
+          className="h-full overflow-y-auto"
         >
           <AgentStatusPanel />
         </motion.div>
@@ -106,7 +105,7 @@ function ValidateDashboard() {
           transition={{ delay: 0.2 }}
           className="min-h-0 overflow-y-auto flex flex-col gap-3"
         >
-          <div className="grid grid-cols-1 gap-3 p-1 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {PARALLEL_AGENTS.map((agent, i) => (
               <motion.div
                 key={agent}
@@ -119,7 +118,9 @@ function ValidateDashboard() {
             ))}
           </div>
 
-          <SynthesisPanel />
+          <div className="flex-1 min-h-0">
+            <AgentCard agent="synthesis" fill />
+          </div>
         </motion.div>
 
         {/* Right — Log feed, fills height and scrolls internally */}

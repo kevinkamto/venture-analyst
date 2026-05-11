@@ -141,9 +141,9 @@ function AgentFullscreenModal({
   );
 }
 
-type Props = { agent: AgentKey };
+type Props = { agent: AgentKey; fill?: boolean };
 
-export function AgentCard({ agent }: Props) {
+export function AgentCard({ agent, fill }: Props) {
   const state = useAgentStore((s) => s.agents[agent]);
   const { status, output, toolCalls, tokenCount, startedAt } = state;
   const [fullscreen, setFullscreen] = useState(false);
@@ -176,9 +176,10 @@ export function AgentCard({ agent }: Props) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
+      className={fill ? "h-full" : undefined}
     >
       <Card
-        className={`border bg-[#0D1117] transition-all duration-300 max-h-48 overflow-hidden flex flex-col ${glowClass} pt-2 pb-1`}
+        className={`border bg-[#0D1117] transition-all duration-300 ${fill ? "h-full" : "max-h-48"} overflow-hidden flex flex-col ${glowClass} pt-2 pb-1`}
       >
         <CardHeader className="flex flex-row items-center justify-between pb-0 pt-0 px-3">
           <div className="flex items-center gap-2">
