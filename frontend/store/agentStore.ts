@@ -81,27 +81,33 @@ export const useAgentStore = create<Store>((set) => ({
   setRunning: (v) => set({ isRunning: v }),
 
   appendToken: (agent, token) =>
-    set((s) => ({
-      agents: {
-        ...s.agents,
-        [agent]: {
-          ...s.agents[agent],
-          output: s.agents[agent].output + token,
-          tokenCount: s.agents[agent].tokenCount + 1,
-          status: "active" as AgentStatus,
+    set((s) => {
+      const cur = s.agents[agent];
+      const isTerminal = cur.status === "complete" || cur.status === "error";
+      return {
+        agents: {
+          ...s.agents,
+          [agent]: {
+            ...cur,
+            output: cur.output + token,
+            tokenCount: cur.tokenCount + 1,
+            status: isTerminal ? cur.status : ("active" as AgentStatus),
+          },
         },
-      },
-    })),
+      };
+    }),
 
   appendTokenBatch: (batch) =>
     set((s) => {
       const updated: Partial<Record<AgentKey, AgentState>> = {};
       for (const [key, tokens] of Object.entries(batch) as [AgentKey, string][]) {
+        const cur = s.agents[key];
+        const isTerminal = cur.status === "complete" || cur.status === "error";
         updated[key] = {
-          ...s.agents[key],
-          output: s.agents[key].output + tokens,
-          tokenCount: s.agents[key].tokenCount + tokens.length,
-          status: "active" as AgentStatus,
+          ...cur,
+          output: cur.output + tokens,
+          tokenCount: cur.tokenCount + tokens.length,
+          status: isTerminal ? cur.status : ("active" as AgentStatus),
         };
       }
       return { agents: { ...s.agents, ...updated } };

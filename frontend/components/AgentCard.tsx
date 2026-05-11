@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Markdown } from "@/components/Markdown";
 import { type AgentKey, type AgentStatus, AGENT_LABELS, useAgentStore } from "@/store/agentStore";
 
 const STATUS_COLORS: Record<AgentStatus, string> = {
@@ -108,10 +109,10 @@ export function AgentCard({ agent }: Props) {
 
                 {/* Streaming output */}
                 {output && (
-                  <div className="mt-1 max-h-48 overflow-y-auto font-sans text-xs leading-relaxed text-[#8B949E] whitespace-pre-wrap">
-                    {output}
+                  <div className="mt-1 max-h-48 overflow-y-auto text-xs text-[#8B949E]">
+                    <Markdown>{output}</Markdown>
                     {isActive && (
-                      <span className="ml-0.5 inline-block h-3 w-0.5 animate-pulse bg-[#00FF88]" />
+                      <span className="mt-1 inline-block h-3 w-0.5 animate-pulse bg-[#00FF88]" />
                     )}
                   </div>
                 )}

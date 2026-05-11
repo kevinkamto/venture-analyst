@@ -4,6 +4,7 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ScoreCard } from "@/components/ScoreCard";
+import { Markdown } from "@/components/Markdown";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getResult, type ResultData } from "@/lib/api";
 
@@ -56,9 +57,9 @@ function ResultSection({
           </div>
         </CardHeader>
         <CardContent className="px-5 pb-5">
-          <p className="font-sans text-sm leading-relaxed text-[#8B949E] whitespace-pre-wrap">
-            {content}
-          </p>
+          <div className="text-sm text-[#8B949E]">
+            <Markdown>{content}</Markdown>
+          </div>
         </CardContent>
       </Card>
     </motion.div>
@@ -185,9 +186,9 @@ export default function ResultPage({ params }: Props) {
                 SYNTHESIS — EXECUTIVE SUMMARY
               </span>
             </div>
-            <p className="font-sans text-sm leading-relaxed text-[#E6EDF3] whitespace-pre-wrap">
-              {result.synthesis}
-            </p>
+            <div className="text-sm text-[#E6EDF3]">
+              <Markdown>{result.synthesis}</Markdown>
+            </div>
           </motion.div>
         )}
 

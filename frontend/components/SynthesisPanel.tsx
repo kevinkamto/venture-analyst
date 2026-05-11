@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
+import { Markdown } from "@/components/Markdown";
 import { useAgentStore } from "@/store/agentStore";
 
 export function SynthesisPanel() {
@@ -30,10 +31,10 @@ export function SynthesisPanel() {
       </div>
       <Separator className="bg-[#00FF88]/10" />
       <div className="px-5 py-4">
-        <div className="font-sans text-sm leading-relaxed text-[#E6EDF3] whitespace-pre-wrap">
-          {output}
+        <div className="text-sm text-[#E6EDF3]">
+          <Markdown>{output}</Markdown>
           {(status === "active" || status === "thinking") && (
-            <span className="ml-0.5 inline-block h-3.5 w-0.5 animate-pulse bg-[#00FF88]" />
+            <span className="mt-1 inline-block h-3.5 w-0.5 animate-pulse bg-[#00FF88]" />
           )}
         </div>
       </div>

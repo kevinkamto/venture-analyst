@@ -49,12 +49,12 @@ function ValidateDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#080B0F] px-4 py-6 md:px-6 lg:px-8">
+    <div className="h-screen overflow-hidden bg-[#080B0F] flex flex-col px-4 pt-6 md:px-6 lg:px-8">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-6 flex items-center justify-between"
+        className="flex-none mb-4 flex items-center justify-between"
       >
         <div className="flex items-center gap-3">
           <button
@@ -87,24 +87,24 @@ function ValidateDashboard() {
         </div>
       </motion.div>
 
-      {/* Three-column layout */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[240px_1fr_240px]">
-        {/* Left — Agent status */}
+      {/* Three-column layout — fills remaining viewport height, each column scrolls internally */}
+      <div className="flex-1 min-h-0 grid grid-cols-1 gap-4 pb-4 lg:grid-cols-[240px_1fr_240px]">
+        {/* Left — Agent status, scrolls if content overflows */}
         <motion.div
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="lg:sticky lg:top-6 lg:self-start"
+          className="overflow-y-auto"
         >
           <AgentStatusPanel />
         </motion.div>
 
-        {/* Center — Live output cards */}
+        {/* Center — Live output cards, scrolls as agents stream */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex flex-col gap-3"
+          className="min-h-0 overflow-y-auto flex flex-col gap-3"
         >
           {PARALLEL_AGENTS.map((agent, i) => (
             <motion.div
@@ -120,12 +120,12 @@ function ValidateDashboard() {
           <SynthesisPanel />
         </motion.div>
 
-        {/* Right — Log feed */}
+        {/* Right — Log feed, fills height and scrolls internally */}
         <motion.div
           initial={{ opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="h-150 lg:sticky lg:top-6 lg:self-start"
+          className="min-h-0 overflow-hidden"
         >
           <LogPanel />
         </motion.div>
