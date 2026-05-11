@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+openai
+httpx
+sse-starlette
+tavily-python
+pydantic>=2.0
+loguru
+ruff
+mypy

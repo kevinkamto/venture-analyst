@@ -1,0 +1,29 @@
+# Virtual environment
+.venv/
+venv/
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+
+# Type checking & linting caches
+.mypy_cache/
+.ruff_cache/
+
+# Environment — never commit real keys
+.env
+
+# Runtime logs
+logs/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db

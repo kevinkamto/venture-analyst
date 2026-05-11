@@ -1,0 +1,106 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  /* Project custom tokens */
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-red: var(--accent-red);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+}
+
+/* Always dark — no light mode */
+:root {
+  --bg-base:        #080B0F;
+  --bg-surface:     #0D1117;
+  --bg-elevated:    #161B22;
+  --border:         #21262D;
+  --accent-primary: #00FF88;
+  --accent-blue:    #388BFD;
+  --accent-amber:   #F0883E;
+  --accent-red:     #F85149;
+  --text-primary:   #E6EDF3;
+  --text-secondary: #8B949E;
+  --text-muted:     #484F58;
+
+  /* shadcn token mappings */
+  --background:           #080B0F;
+  --foreground:           #E6EDF3;
+  --card:                 #0D1117;
+  --card-foreground:      #E6EDF3;
+  --popover:              #161B22;
+  --popover-foreground:   #E6EDF3;
+  --primary:              #00FF88;
+  --primary-foreground:   #080B0F;
+  --secondary:            #161B22;
+  --secondary-foreground: #E6EDF3;
+  --muted:                #161B22;
+  --muted-foreground:     #8B949E;
+  --accent:               #161B22;
+  --accent-foreground:    #E6EDF3;
+  --destructive:          #F85149;
+  --input:                #21262D;
+  --ring:                 #00FF88;
+  --radius:               0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-color: #080B0F;
+    color: #E6EDF3;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #0D1117;
+}
+::-webkit-scrollbar-thumb {
+  background: #21262D;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #484F58;
+}

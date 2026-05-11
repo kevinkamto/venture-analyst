@@ -1,0 +1,14 @@
+# Claude Code / tooling
+/.claude
+/temp
+/memory
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
