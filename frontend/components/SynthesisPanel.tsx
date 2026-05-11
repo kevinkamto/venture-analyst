@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
 import { Markdown } from "@/components/Markdown";
@@ -8,6 +9,13 @@ import { useAgentStore } from "@/store/agentStore";
 export function SynthesisPanel() {
   const synthState = useAgentStore((s) => s.agents.synthesis);
   const { status, output } = synthState;
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [output]);
 
   if (status === "idle") return null;
 
@@ -31,7 +39,7 @@ export function SynthesisPanel() {
       </div>
       <Separator className="bg-[#00FF88]/10" />
       <div className="px-5 py-4">
-        <div className="text-sm text-[#E6EDF3]">
+        <div ref={scrollRef} className="max-h-48 overflow-y-auto text-sm text-[#E6EDF3]">
           <Markdown>{output}</Markdown>
           {(status === "active" || status === "thinking") && (
             <span className="mt-1 inline-block h-3.5 w-0.5 animate-pulse bg-[#00FF88]" />

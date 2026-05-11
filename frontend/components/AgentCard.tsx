@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Maximize2, X } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -147,6 +147,13 @@ export function AgentCard({ agent }: Props) {
   const state = useAgentStore((s) => s.agents[agent]);
   const { status, output, toolCalls, tokenCount, startedAt } = state;
   const [fullscreen, setFullscreen] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [output]);
 
   const elapsed = startedAt
     ? Math.floor((Date.now() - startedAt) / 1000)
@@ -171,7 +178,7 @@ export function AgentCard({ agent }: Props) {
       transition={{ duration: 0.3 }}
     >
       <Card
-        className={`border bg-[#0D1117] transition-all duration-300 max-h-64 overflow-hidden flex flex-col ${glowClass} pt-2 pb-1`}
+        className={`border bg-[#0D1117] transition-all duration-300 max-h-48 overflow-hidden flex flex-col ${glowClass} pt-2 pb-1`}
       >
         <CardHeader className="flex flex-row items-center justify-between pb-0 pt-0 px-3">
           <div className="flex items-center gap-2">
@@ -218,18 +225,25 @@ export function AgentCard({ agent }: Props) {
             >
               <CardContent className="px-4 pb-3 flex-1 min-h-0 flex flex-col overflow-hidden">
                 {/* Tool calls */}
-                {toolCalls.map((tc, i) => (
-                  <div
-                    key={i}
-                    className="mb-1 font-mono text-[11px] text-[#388BFD] opacity-80"
-                  >
-                    &gt; {tc}
+                {toolCalls.length > 0 && (
+                  <div className="max-h-16 overflow-y-auto flex-none">
+                    {toolCalls.map((tc, i) => (
+                      <div
+                        key={i}
+                        className="mb-1 font-mono text-[11px] text-[#388BFD] opacity-80"
+                      >
+                        &gt; {tc}
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
 
                 {/* Streaming output */}
                 {output && (
-                  <div className="mt-1 flex-1 min-h-0 overflow-y-auto text-xs text-[#8B949E]">
+                  <div
+                    ref={scrollRef}
+                    className="mt-1 flex-1 min-h-0 overflow-y-auto text-xs text-[#8B949E]"
+                  >
                     <Markdown>{output}</Markdown>
                     {isActive && (
                       <span className="mt-1 inline-block h-3 w-0.5 animate-pulse bg-[#00FF88]" />
