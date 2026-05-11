@@ -17,7 +17,7 @@ const STATUS_COLORS: Record<AgentStatus, string> = {
   idle: "text-[#484F58] border-[#21262D]",
   thinking: "text-[#388BFD] border-[#388BFD]/40",
   active: "text-[#00FF88] border-[#00FF88]/40",
-  complete: "text-[#00FF88] border-[#00FF88]/40",
+  complete: "text-[#8B949E] border-[#8B949E]/40",
   error: "text-[#F85149] border-[#F85149]/40",
 };
 
@@ -33,7 +33,7 @@ const STATUS_DOT: Record<AgentStatus, string> = {
   idle: "bg-[#484F58]",
   thinking: "bg-[#388BFD] animate-pulse",
   active: "bg-[#00FF88] animate-pulse",
-  complete: "bg-[#00FF88]",
+  complete: "bg-[#8B949E]",
   error: "bg-[#F85149]",
 };
 
@@ -164,9 +164,11 @@ export function AgentCard({ agent, fill }: Props) {
       ? "border-[#00FF88]/30 shadow-[0_0_20px_#00FF8820]"
       : status === "thinking"
         ? "border-[#388BFD]/30 shadow-[0_0_16px_#388BFD15]"
-        : status === "error"
-          ? "border-[#F85149]/30"
-          : "border-[#21262D]";
+        : status === "complete"
+          ? "border-[#8B949E]/20"
+          : status === "error"
+            ? "border-[#F85149]/30"
+            : "border-[#21262D]";
 
   const isActive = status === "active" || status === "thinking";
 
@@ -179,9 +181,9 @@ export function AgentCard({ agent, fill }: Props) {
       className={fill ? "h-full" : undefined}
     >
       <Card
-        className={`border bg-[#0D1117] transition-all duration-300 ${fill ? "h-full" : "max-h-48"} overflow-hidden flex flex-col ${glowClass} pt-2 pb-1`}
+        className={`border bg-[#0D1117] transition-all duration-300 ${fill ? "h-full" : "max-h-48"} overflow-hidden flex flex-col ${glowClass} pt-2 pb-1 gap-1`}
       >
-        <CardHeader className="flex flex-row items-center justify-between pb-0 pt-0 px-3">
+        <CardHeader className="flex flex-row items-center justify-between pb-1 pt-0 px-3">
           <div className="flex items-center gap-2">
             <span className={`h-2 w-2 rounded-full ${STATUS_DOT[status]}`} />
             <span className="font-mono text-xs font-semibold text-[#E6EDF3]">
