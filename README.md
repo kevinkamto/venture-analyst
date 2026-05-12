@@ -6,12 +6,12 @@ AI-powered validation for startup ideas using 5 parallel agents.
 |---|---|
 |![Startup Validator Agent](images/thumb.png "Startup Validator Agent")|![Startup Validator Agent](images/ending.png "Startup Validator Agent")|
 
-![Running](images/running.gif "Running")
+![Running](https://drive.google.com/file/d/1LbKlEYFGbBlpiWGuWp5jASVlr1sq2Nad/view?usp=drive_link "Running")
 
 ## Stack
 
-**Backend:** FastAPI · Pydantic v2 · OpenAI · SSE-Starlette · Loguru · Ruff · Mypy · Tavily
-**Frontend:** Next.js (App Router) · Turbopack · shadcn/ui · Tailwind · Zustand · Framer Motion
+- **Backend:** FastAPI · Pydantic v2 · OpenAI · SSE-Starlette · Loguru · Ruff · Mypy · Tavily
+- **Frontend:** Next.js (App Router) · Turbopack · shadcn/ui · Tailwind · Zustand · Framer Motion
 
 ## Quick Start
 
