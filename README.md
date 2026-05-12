@@ -6,7 +6,7 @@ AI-powered validation for startup ideas using 5 parallel agents.
 |---|---|
 |![Startup Validator Agent](images/thumb.png "Startup Validator Agent")|![Startup Validator Agent](images/ending.png "Startup Validator Agent")|
 
-![Running](https://drive.google.com/file/d/1LbKlEYFGbBlpiWGuWp5jASVlr1sq2Nad/view?usp=drive_link "Running")
+![Running](images/running.gif "Running")
 
 ## Stack
 
