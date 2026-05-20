@@ -25,6 +25,8 @@ idea submitted
 
 Events stream over SSE as they happen - thinking, tool calls, tokens, completion - so the UI updates live without polling.
 
+![Live dashboard — agents streaming in parallel](images/running.png)
+
 ---
 
 ## Running locally
