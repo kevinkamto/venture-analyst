@@ -1,4 +1,4 @@
-# Startup Validator — Portfolio Project Spec
+# Venture Analyst — Portfolio Project Spec
 
 ## Stack
 
@@ -22,8 +22,8 @@
 ```
 backend/
 ├── main.py
-├── requirements.txt
-├── pyproject.toml          ← Ruff + Mypy config
+├── pyproject.toml          ← project metadata, uv deps, Ruff + Mypy config
+├── lint.py                 ← ruff check --fix + ruff format + mypy
 ├── .env
 ├── agents/
 │   ├── __init__.py
@@ -50,8 +50,8 @@ backend/
 
 ```bash
 cd backend
-uv venv
-uv pip install fastapi uvicorn python-dotenv openai httpx sse-starlette tavily-python "pydantic>=2.0" loguru ruff mypy
+uv sync              # install runtime dependencies
+uv sync --group dev  # also install ruff + mypy
 ```
 
 ### `.env`
@@ -61,29 +61,37 @@ OPENAI_API_KEY=your_key
 TAVILY_API_KEY=your_key
 ```
 
-### `requirements.txt`
-
-```
-fastapi
-uvicorn
-python-dotenv
-openai
-httpx
-sse-starlette
-tavily-python
-pydantic>=2.0
-loguru
-ruff
-mypy
-```
-
 ### `pyproject.toml`
 
 ```toml
+[project]
+name = "venture-analyst-backend"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.136.1",
+    "uvicorn[standard]>=0.46.0",
+    "python-dotenv>=1.2.2",
+    "openai>=2.36.0",
+    "httpx>=0.28.1",
+    "sse-starlette>=3.4.3",
+    "tavily-python>=0.7.24",
+    "pydantic>=2.0",
+    "loguru>=0.7.3",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.12",
+    "mypy>=2.0.0",
+]
+
 [tool.ruff]
 line-length = 88
+
+[tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
-ignore = []
+ignore = ["E501"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -104,7 +112,7 @@ from api.routes import router
 
 logger.add("logs/app.log", rotation="10 MB", retention="7 days", level="INFO")
 
-app = FastAPI(title="Startup Validator API")
+app = FastAPI(title="Venture Analyst API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -253,12 +261,15 @@ frontend/
 │       └── [jobId]/
 │           └── page.tsx        ← Final report
 ├── components/
-│   ├── ui/                     ← shadcn/ui primitives (auto-generated)
-│   ├── AgentCard.tsx           ← uses shadcn Card + Badge
-│   ├── LogPanel.tsx            ← uses shadcn ScrollArea
-│   ├── OutputPanel.tsx
-│   ├── SynthesisPanel.tsx      ← uses shadcn Separator
-│   └── ScoreCard.tsx           ← uses shadcn Progress
+│   ├── ui/                         ← shadcn/ui primitives (auto-generated)
+│   ├── analysis/
+│   │   ├── AgentOutputCard.tsx     ← uses shadcn Card + Badge
+│   │   ├── AgentProgressList.tsx   ← sidebar agent status list
+│   │   ├── ActivityFeed.tsx        ← uses shadcn ScrollArea
+│   │   └── SynthesisOutput.tsx     ← uses shadcn Separator
+│   ├── report/
+│   │   └── ValidationScore.tsx     ← uses shadcn Progress
+│   └── Markdown.tsx
 ├── hooks/
 │   └── useAgentStream.ts
 ├── store/
@@ -358,53 +369,63 @@ export function useAgentStream(jobId: string | null) {
 
 ## 3. UI Design Direction
 
-### Theme: **Dark Terminal Intelligence**
+### Theme: **Warm Parchment Studio**
 
-The UI should feel like a live operations center — dark, precise, technical, and alive. Not a typical SaaS dashboard. Think Bloomberg terminal meets AI war room.
+The UI should feel like a thoughtful analyst's workspace — warm, legible, and calm. Not a dark terminal or neon dashboard. Think a well-designed research report or a premium strategy consultant's tool. Light backgrounds, warm earth tones, serif display type.
 
 ### Colors
 
 ```css
---bg-base:        #080B0F;   /* near black with blue undertone */
---bg-surface:     #0D1117;   /* card/panel background */
---bg-elevated:    #161B22;   /* elevated elements */
---border:         #21262D;   /* subtle borders */
---accent-primary: #00FF88;   /* electric green — agent active states */
---accent-blue:    #388BFD;   /* blue — links, info */
---accent-amber:   #F0883E;   /* amber — warnings, risk agent */
---accent-red:     #F85149;   /* red — errors */
---text-primary:   #E6EDF3;
---text-secondary: #8B949E;
---text-muted:     #484F58;
+--bg-base:        #FBF8F3;   /* warm off-white cream */
+--bg-surface:     #F3EDE0;   /* warm beige — card/panel background */
+--bg-elevated:    #E8DFC9;   /* deeper beige — elevated elements */
+--border:         #CDBFA3;   /* tan/caramel border */
+--accent-amber:   #9B6E2E;   /* warm amber brown — primary CTA, market agent */
+--accent-teal:    #2E6B5A;   /* forest teal — complete state, monetisation agent */
+--accent-rust:    #B84D26;   /* warm rust — errors, risk agent */
+--accent-slate:   #4A5E72;   /* muted slate blue — thinking state, competitor agent */
+--text-primary:   #251A0E;   /* very dark brown */
+--text-secondary: #5A4230;   /* medium warm brown */
+--text-muted:     #967860;   /* muted caramel */
 ```
 
 ### Typography
 
 ```
-Display/Headers:  "JetBrains Mono" or "Berkeley Mono" — monospace, technical
-Body:             "Inter" or "DM Sans" — readable
-Log Panel:        pure monospace, small, tight line-height
+Display/Headlines: "Playfair Display" — serif, intellectual weight
+Body/UI:           "DM Sans" — humanist sans, clean and approachable
+Data/Logs:         "JetBrains Mono" — monospace only for token counts, log timestamps, IDs
 ```
 
-Import via Google Fonts or `next/font`.
+Import via `next/font/google`.
 
 ### Animations (Framer Motion)
 
-- Agent cards pulse with a glow border when status is `active`
-- Tokens stream in with a subtle fade-in per character group
-- Log entries slide in from the left
-- Status badge transitions are animated (not instant jumps)
-- Page load: staggered reveal of all panels top to bottom
-- Synthesis panel appears with a dramatic fade + scale after parallel agents complete
+- Agent cards show a warm amber box-shadow when status is `active`
+- Tokens stream in with a subtle fade-in
+- Activity feed entries slide in from the left
+- Status transitions are smooth (not instant)
+- Page load: staggered reveal top to bottom
+- Synthesis panel fades in with a gentle scale after parallel agents complete
 
 ### Agent Status Colors
 
 ```
-idle      → --text-muted, no glow
-thinking  → --accent-blue, slow pulse
-active    → --accent-primary, fast pulse glow
-complete  → --accent-primary solid, no pulse
-error     → --accent-red
+idle      → --text-muted (#967860), no indicator
+thinking  → --accent-slate (#4A5E72), slow pulse dot
+active    → --accent-amber (#9B6E2E), fast pulse + warm box-shadow
+complete  → --accent-teal (#2E6B5A), solid dot
+error     → --accent-rust (#B84D26)
+```
+
+### Agent ↔ Accent Colour Mapping
+
+```
+market_research → accent-amber  (#9B6E2E)
+competitor      → accent-slate  (#4A5E72)
+risk            → accent-rust   (#B84D26)
+monetisation    → accent-teal   (#2E6B5A)
+synthesis       → accent-amber  (#9B6E2E)
 ```
 
 ---
@@ -415,102 +436,90 @@ error     → --accent-red
 
 Layout:
 
-- Full screen dark background
-- Large centered monospace headline: `"IS YOUR IDEA WORTH BUILDING?"`
-- Subtext: `"5 AI agents. Parallel analysis. Real answers."`
-- Single textarea input: `"Describe your startup idea..."`
-- One CTA button: `"RUN ANALYSIS →"`
-- Subtle animated grid or noise texture background
+- Full-screen warm cream background (`#FBF8F3`)
+- Serif headline (Playfair Display): *"Is your idea worth building?"*
+- Descriptive subtext explaining the five agents
+- Single textarea input with warm beige background
+- One CTA button in `#9B6E2E` amber brown
+- Subtle dot-pattern background overlay
 - On submit → POST `/api/validate` → redirect to `/validate?job={jobId}`
 
 ### `app/validate/page.tsx` — Live Dashboard
 
-Three-column layout on desktop, stacked on mobile:
+Two-column layout on desktop, stacked on mobile:
 
-**Left Column — Agent Status Panel (fixed)**
-
-```
-┌─────────────────────┐
-│  ACTIVE AGENTS  [4] │
-├─────────────────────┤
-│ ◉ Market Research   │
-│   thinking · 0:04   │
-│   2 tool calls      │
-│                     │
-│ ◉ Competitor        │
-│   active · 0:06     │
-│   1 tool call       │
-│                     │
-│ ◈ Risk Assessment   │
-│   complete · 0:09   │
-│   847 tokens        │
-│                     │
-│ ○ Monetisation      │
-│   idle              │
-│                     │
-│ ◈ Synthesis         │
-│   waiting...        │
-└─────────────────────┘
-```
-
-**Center Column — Live Output Panels**
-
-- One card per agent
-- Each streams output token by token
-- Card header shows agent name + status badge
-- Tool call events render inline as: `> tool_call: web_search("...")`
-- Monospace font for tool calls, regular for output text
-- Cards collapse when idle, expand when active
-
-**Right Column — Live Log Feed**
+**Left column (flexible) — Agent Output Cards**
 
 ```
-┌──────────────────────────────┐
-│  SYSTEM LOGS          LIVE ● │
-├──────────────────────────────┤
-│ 12:03:01 market  thinking    │
-│ 12:03:02 market  tool_call   │
-│ 12:03:03 comp    thinking    │
-│ 12:03:04 market  token ▓▓▓   │
-│ 12:03:05 risk    thinking    │
-│ 12:03:07 comp    tool_call   │
-│ ...                          │
-└──────────────────────────────┘
+┌─────────────────┐  ┌─────────────────┐
+│ Market Research │  │ Competitor Anal.│
+│ [Active ●]      │  │ [Thinking ○]    │
+│ streaming text… │  │ Thinking…       │
+└─────────────────┘  └─────────────────┘
+
+┌─────────────────┐  ┌─────────────────┐
+│ Risk Assessment │  │ Monetisation    │
+│ [Done ✓]        │  │ [Idle]          │
+│ output text…    │  │                 │
+└─────────────────┘  └─────────────────┘
+
+┌────────────────────────────────────────┐
+│ Synthesis — Final Analysis             │
+│ [streaming…]                           │
+└────────────────────────────────────────┘
 ```
 
-- Auto-scroll to latest
-- Color-coded by agent
-- Small monospace font
+**Right column (280 px fixed) — Progress + Activity**
 
-**Bottom — Synthesis Panel**
+```
+┌──────────────────────┐
+│  Agents   2 running  │
+├──────────────────────┤
+│ ● Market Research    │
+│   streaming · 12s    │
+│ ○ Competitor         │
+│   thinking · 6s      │
+│ ✓ Risk               │
+│   complete · 9s      │
+│ - Monetisation       │
+│   waiting            │
+│ - Synthesis          │
+│   waiting            │
+├──────────────────────┤
+│  Activity       live │
+├──────────────────────┤
+│ 12:03:01 market …   │
+│ 12:03:02 comp   …   │
+└──────────────────────┘
+```
 
-- Hidden until all 4 parallel agents complete
-- Appears with animation
-- Full-width streaming output
-- Label: `SYNTHESIS AGENT — FINAL ANALYSIS`
+- Activity feed auto-scrolls, color-coded per agent
+- Monospace font for timestamps/types only
 
 ### `app/result/[jobId]/page.tsx` — Final Report
 
-Sections displayed as cards:
-
 ```
-┌──────────────────────────────────────┐
-│  VALIDATION SCORE          82 / 100  │
-│  ██████████████████░░░░              │
-│  Verdict: STRONG OPPORTUNITY         │
-└──────────────────────────────────────┘
+┌────────────────────────────────────────┐
+│  Validation Score            82 / 100  │
+│  ████████████████████░░░░              │
+│  Verdict: Promising                    │
+└────────────────────────────────────────┘
 
-┌──────────────┐ ┌──────────────┐
-│ Market       │ │ Competitors  │
-│ Opportunity  │ │              │
-└──────────────┘ └──────────────┘
+┌─────────────────┐  ┌─────────────────┐
+│ Market          │  │ Competitors     │
+│ Opportunity     │  │                 │
+└─────────────────┘  └─────────────────┘
 
-┌──────────────┐ ┌──────────────┐
-│ Key Risks    │ │ Monetisation │
-│              │ │ Strategy     │
-└──────────────┘ └──────────────┘
+┌─────────────────┐  ┌─────────────────┐
+│ Key Risks       │  │ Monetisation    │
+│                 │  │ Strategy        │
+└─────────────────┘  └─────────────────┘
 
-[ Export PDF ]  [ Validate Another Idea ]
+┌────────────────────────────────────────┐
+│ Synthesis — Executive Summary          │
+└────────────────────────────────────────┘
+
+        [ Analyse another idea → ]
 ```
 
 ---
@@ -552,7 +561,7 @@ export const getResult = async (jobId: string): Promise<ResultData>
 
 1. Create `frontend/` with Next.js + Turbopack
 2. Run `npx shadcn@latest init` and add required components
-3. Set up Tailwind CSS variables (dark theme)
+3. Set up Tailwind CSS variables (warm parchment theme — no dark class)
 4. Implement `store/agentStore.ts` (Zustand)
 5. Implement `hooks/useAgentStream.ts`
 
@@ -560,17 +569,18 @@ export const getResult = async (jobId: string): Promise<ResultData>
 
 1. Build landing page (`app/page.tsx`)
 2. Build agent dashboard (`app/validate/page.tsx`)
-3. Build `AgentCard.tsx` using shadcn `Card` + `Badge`
-4. Build `LogPanel.tsx` using shadcn `ScrollArea`
-5. Build `ScoreCard.tsx` using shadcn `Progress`
-6. Build `SynthesisPanel.tsx` using shadcn `Separator`
-7. Build result page (`app/result/[jobId]/page.tsx`)
+3. Build `components/analysis/AgentOutputCard.tsx` using shadcn `Card` + `Badge`
+4. Build `components/analysis/AgentProgressList.tsx` — sidebar agent status list
+5. Build `components/analysis/ActivityFeed.tsx` using shadcn `ScrollArea`
+6. Build `components/analysis/SynthesisOutput.tsx` using shadcn `Separator`
+7. Build `components/report/ValidationScore.tsx` using shadcn `Progress`
+8. Build result page (`app/result/[jobId]/page.tsx`)
 
 ### Step 5 — Polish
 
 1. Add Framer Motion animations
-2. Agent glow effects on active state
-3. Token streaming character-by-character effect
+2. Agent warm box-shadow on active state
+3. Token streaming fade-in effect
 4. Mobile responsive layout
 5. Error and loading states
 6. Connect frontend to backend, end-to-end test
@@ -593,3 +603,6 @@ export const getResult = async (jobId: string): Promise<ResultData>
 - Tool calls must be visible in UI as they happen
 - Synthesis agent only starts after ALL parallel agents emit `complete`
 - No placeholder data — everything is real LLM output
+- Theme is light (warm parchment) — never add `dark` class or dark-mode variables
+- Fonts: Playfair Display (display), DM Sans (body), JetBrains Mono (data/logs only)
+- Custom components live in `components/analysis/` and `components/report/`

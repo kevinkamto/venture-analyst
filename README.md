@@ -1,12 +1,10 @@
-# Startup Validator Agent
+# Venture Analyst
 
-AI-powered validation for startup ideas using 5 parallel agents.
+AI-powered startup idea evaluation using five parallel agents.
 
-|Thumbnail|Final Result|
-|---|---|
-|![Startup Validator Agent](images/thumb.png "Startup Validator Agent")|![Startup Validator Agent](images/ending.png "Startup Validator Agent")|
-
-![Running](images/running.gif "Running")
+| Thumbnail                                         | Final Result                                       |
+| ------------------------------------------------- | -------------------------------------------------- |
+| ![Venture Analyst](images/thumb.png "Venture Analyst") | ![Venture Analyst](images/ending.png "Venture Analyst") |
 
 ## Stack
 
@@ -17,127 +15,29 @@ AI-powered validation for startup ideas using 5 parallel agents.
 
 ### Prerequisites
 
-Python 3.11+, Node.js 18+, `uv` and `pnpm` package managers
-API keys: OpenAI and Tavily
+- Python 3.11+ and [`uv`](https://docs.astral.sh/uv/)
+- Node.js 18+ and [`pnpm`](https://pnpm.io/)
+- OpenAI and Tavily API keys
 
-### Setup
-
-**Backend:**
-
-```bash
-cd backend && uv venv && source .venv/bin/activate
-uv pip install -r requirements.txt
-```
-
-**Frontend:**
+### Backend
 
 ```bash
-cd frontend && pnpm install
+cd backend
+uv sync                        # install all deps from uv.lock
+uv sync --group dev            # also install ruff + mypy
+cp .env.example .env           # then fill in your keys
+uv run uvicorn main:app --reload
 ```
 
-Create `backend/.env`:
-
-```env
-OPENAI_API_KEY=your_key
-TAVILY_API_KEY=your_key
-```
-
-### Run
-
-**Terminal 1:**
+### Frontend
 
 ```bash
-cd backend && source .venv/bin/activate && uvicorn main:app --reload
+cd frontend
+pnpm install
+pnpm dev
 ```
 
-**Terminal 2:**
-
-```bash
-cd frontend && pnpm dev
-```
-
-Visit `http://localhost:3000`
-
-## Folder Structure
-
-```
-backend/
-├── main.py                  # FastAPI app
-├── agents/                  # 5 AI agents
-│   ├── market_agent.py
-│   ├── competitor_agent.py
-│   ├── risk_agent.py
-│   ├── monetisation_agent.py
-│   └── synthesis_agent.py
-├── core/                    # Orchestration & streaming
-│   ├── orchestrator.py
-│   ├── job_store.py
-│   └── streaming.py
-├── api/routes.py            # API endpoints
-└── schemas/                 # Pydantic models
-
-frontend/
-├── app/
-│   ├── page.tsx             # Landing
-│   ├── validate/page.tsx    # Live dashboard
-│   └── result/[jobId]/page.tsx  # Results
-├── components/
-│   ├── AgentCard.tsx
-│   ├── AgentStatusPanel.tsx
-│   ├── LogPanel.tsx
-│   ├── ScoreCard.tsx
-│   └── SynthesisPanel.tsx
-├── store/agentStore.ts      # Zustand state
-└── hooks/useAgentStream.ts  # SSE streaming
-```
-
-## API Endpoints
-
-**POST `/api/validate`** — Start validation
-Request: `{ "idea": "..." }` → Response: `{ "job_id": "uuid" }`
-
-**GET `/api/stream/{job_id}`** — SSE stream of agent events
-Events: `{ "agent": "market_research", "type": "token", "data": "..." }`
-
-**GET `/api/result/{job_id}`** — Final validation result
-Response: `{ "job_id": "...", "score": 82, "verdict": "STRONG", "market": "...", ... }`
-
-## Agents
-
-| Agent           | Focus                          | Web Search |
-| --------------- | ------------------------------ | ---------- |
-| Market Research | Market size, TAM, trends       | ✅ Yes     |
-| Competitor      | Top competitors, gaps          | ✅ Yes     |
-| Risk            | Legal, technical, market risks | ❌ No      |
-| Monetisation    | Revenue models, pricing        | ❌ No      |
-| Synthesis       | Merge outputs, score 0-100     | ❌ No      |
-
-All 4 agents run in parallel. Synthesis runs after they complete.
-
-## Architecture
-
-**Flow:**
-
-1. User submits startup idea via POST `/api/validate`
-2. Backend creates job ID and starts orchestrator
-3. 4 agents run in parallel, emit SSE events to `/api/stream/{job_id}`
-4. Frontend connects via EventSource, updates Zustand store
-5. After all agents complete, synthesis agent runs
-6. Final result available at `/api/result/{job_id}`
-
-**State Management:** Zustand on frontend tracks agent status, output, and logs in real-time.
-
-## Code Quality
-
-```bash
-# Backend
-ruff check .      # Linting
-ruff format .     # Formatting
-mypy .            # Type checking (strict mode)
-
-# Frontend
-pnpm lint         # ESLint
-```
+Visit `http://localhost:3000`.
 
 ## Environment
 
@@ -145,49 +45,88 @@ pnpm lint         # ESLint
 # backend/.env
 OPENAI_API_KEY=your_key
 TAVILY_API_KEY=your_key
-
-# frontend/.env.local (optional)
-NEXT_PUBLIC_API_URL=http://localhost:8000/api
 ```
 
-## 🤝 Contributing
+## Project Structure
 
-This is a portfolio project. To extend or modify:
+```
+backend/
+├── main.py                   # FastAPI entry point
+├── pyproject.toml            # project metadata + uv deps + ruff/mypy config
+├── lint.py                   # ruff check --fix, ruff format, mypy
+├── agents/
+│   ├── base.py
+│   ├── market_agent.py
+│   ├── competitor_agent.py
+│   ├── risk_agent.py
+│   ├── monetisation_agent.py
+│   └── synthesis_agent.py
+├── core/
+│   ├── orchestrator.py
+│   ├── job_store.py
+│   └── streaming.py
+├── api/
+│   └── routes.py
+└── schemas/
+    ├── events.py
+    ├── requests.py
+    └── responses.py
 
-1. **Backend changes:** Ensure `ruff check .` and `mypy .` pass
-2. **Frontend changes:** Ensure `pnpm lint` passes
-3. **New agents:** Follow the pattern in `agents/base.py`
-4. **Type annotations:** Backend functions must be fully typed for Mypy strict mode
+frontend/
+├── app/
+│   ├── page.tsx                      # Landing
+│   ├── validate/page.tsx             # Live analysis dashboard
+│   └── result/[jobId]/page.tsx       # Final report
+├── components/
+│   ├── analysis/
+│   │   ├── AgentOutputCard.tsx
+│   │   ├── AgentProgressList.tsx
+│   │   ├── ActivityFeed.tsx
+│   │   └── SynthesisOutput.tsx
+│   ├── report/
+│   │   └── ValidationScore.tsx
+│   └── Markdown.tsx
+├── store/agentStore.ts               # Zustand state
+└── hooks/useAgentStream.ts           # SSE client
+```
 
-## 📖 Architecture Documentation
+## API
 
-For detailed architecture and implementation decisions, see:
+| Method | Path                     | Description                  |
+| ------ | ------------------------ | ---------------------------- |
+| POST   | `/api/validate`        | Submit idea →`{ job_id }` |
+| GET    | `/api/stream/{job_id}` | SSE stream of agent events   |
+| GET    | `/api/result/{job_id}` | Final scored result          |
 
-- **[CLAUDE.md](./CLAUDE.md)** — Complete project specification
-- **Backend README** — Backend-specific setup and patterns
-- **Frontend CLAUDE.md** — Frontend-specific design guidelines
+SSE event shape: `{ "agent": "market_research", "type": "token", "data": "..." }`
 
-## 📄 License
+## Agents
 
-This is a portfolio project. Feel free to use as reference or starting point for your own projects.
+| Agent           | Focus                                | Web Search |
+| --------------- | ------------------------------------ | ---------- |
+| Market Research | Market size, TAM, trends             | Yes        |
+| Competitor      | Top competitors, positioning gaps    | Yes        |
+| Risk            | Legal, technical, execution risks    | No         |
+| Monetisation    | Revenue models, pricing strategy     | No         |
+| Synthesis       | Merge outputs, score 0–100, verdict | No         |
 
-## 🙋 Support
+The four analysis agents run in parallel via `asyncio.gather`. Synthesis starts only after all four emit `complete`.
 
-For issues or questions:
+## Code Quality
 
-1. Check the project specification in `CLAUDE.md`
-2. Review agent implementations in `backend/agents/`
-3. Check frontend components in `frontend/components/`
+```bash
+# from backend/
+uv run python lint.py     # ruff check --fix + ruff format + mypy
 
-## 🎯 Next Steps
+# from frontend/
+pnpm lint                 # ESLint
+```
 
-- [ ] Add comprehensive test suites for agents
-- [ ] Implement PDF export for validation results
-- [ ] Add caching for repeated analyses
-- [ ] Create admin dashboard for monitoring jobs
-- [ ] Add user authentication and job history
-- [ ] Deploy to production (Vercel + Railway)
+## Architecture
 
----
-
-**Built with ❤️ as a full-stack portfolio project**
+1. User submits an idea — `POST /api/validate` returns a `job_id`
+2. Orchestrator spawns four agents concurrently
+3. Each agent emits SSE events (thinking → tool_call → token → complete)
+4. Frontend subscribes via `EventSource`, updates Zustand store in real time
+5. Synthesis agent runs once all four parallel agents are complete
+6. Final scored result available at `GET /api/result/{job_id}`
