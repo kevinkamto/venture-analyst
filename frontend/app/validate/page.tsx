@@ -3,13 +3,13 @@
 import { Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { AgentCard } from "@/components/AgentCard";
-import { LogPanel } from "@/components/LogPanel";
-import { AgentStatusPanel } from "@/components/AgentStatusPanel";
+import { AgentOutputCard } from "@/components/analysis/AgentOutputCard";
+import { ActivityFeed } from "@/components/analysis/ActivityFeed";
+import { AgentProgressList } from "@/components/analysis/AgentProgressList";
 import { useAgentStream } from "@/hooks/useAgentStream";
 import { useAgentStore, PARALLEL_AGENTS } from "@/store/agentStore";
 
-function ValidateDashboard() {
+function AnalysisDashboard() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const jobId = searchParams.get("job");
@@ -33,12 +33,12 @@ function ValidateDashboard() {
 
   if (!activeJobId) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#080B0F]">
-        <div className="text-center font-mono">
-          <p className="text-[#F85149] text-sm mb-4">No job ID found.</p>
+      <div className="flex min-h-screen items-center justify-center bg-[#FBF8F3]">
+        <div className="text-center">
+          <p className="text-[#B84D26] text-sm mb-4 font-sans">No analysis job found.</p>
           <button
             onClick={() => router.push("/")}
-            className="text-[#00FF88] text-xs underline"
+            className="text-[#9B6E2E] text-sm underline font-sans"
           >
             Start a new analysis →
           </button>
@@ -48,89 +48,85 @@ function ValidateDashboard() {
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-[#080B0F] flex flex-col px-4 pt-6 md:px-6 lg:px-8">
+    <div className="h-screen overflow-hidden bg-[#FBF8F3] flex flex-col px-4 pt-5 md:px-6 lg:px-8">
       {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: -8 }}
+        initial={{ opacity: 0, y: -6 }}
         animate={{ opacity: 1, y: 0 }}
         className="flex-none mb-4 flex items-center justify-between"
       >
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push("/")}
-            className="font-mono text-xs text-[#484F58] hover:text-[#8B949E] transition-colors"
+            className="font-sans text-xs text-[#967860] hover:text-[#5A4230] transition-colors"
           >
-            ← HOME
+            ← Home
           </button>
-          <span className="text-[#21262D]">|</span>
-          <h1 className="font-mono text-sm font-bold text-[#E6EDF3]">
-            ANALYSIS IN PROGRESS
+          <span className="text-[#CDBFA3]">·</span>
+          <h1 className="font-sans text-sm font-semibold text-[#251A0E]">
+            Analysis in progress
           </h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {isRunning && (
-            <span className="flex items-center gap-1.5 font-mono text-xs text-[#00FF88]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#00FF88] animate-pulse" />
-              RUNNING
+            <span className="flex items-center gap-1.5 font-sans text-xs text-[#9B6E2E]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#9B6E2E] animate-pulse" />
+              Running
             </span>
           )}
           {!isRunning && synthStatus === "complete" && (
-            <span className="flex items-center gap-1.5 font-mono text-xs text-[#00FF88]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#00FF88]" />
-              REDIRECTING TO REPORT...
+            <span className="flex items-center gap-1.5 font-sans text-xs text-[#2E6B5A]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#2E6B5A]" />
+              Preparing report…
             </span>
           )}
-          <span className="font-mono text-[10px] text-[#484F58]">
+          <span className="font-mono text-[10px] text-[#CDBFA3]">
             {activeJobId.slice(0, 8)}
           </span>
         </div>
       </motion.div>
 
-      {/* Three-column layout — fills remaining viewport height, each column scrolls internally */}
-      <div className="flex-1 min-h-0 grid grid-cols-1 gap-4 pb-4 lg:grid-cols-[240px_1fr_240px]">
-        {/* Left — Agent status, scrolls if content overflows */}
-        <motion.div
-          initial={{ opacity: 0, x: -16 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 }}
-          className="h-full overflow-y-auto"
-        >
-          <AgentStatusPanel />
-        </motion.div>
+      {/* Two-column layout: left 65% output, right 35% activity + status */}
+      <div className="flex-1 min-h-0 grid grid-cols-1 gap-4 pb-4 lg:grid-cols-[1fr_280px]">
 
-        {/* Center — Live output cards, scrolls as agents stream */}
+        {/* Left — agent output cards */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.1 }}
           className="min-h-0 overflow-y-auto flex flex-col gap-3"
         >
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {PARALLEL_AGENTS.map((agent, i) => (
               <motion.div
                 key={agent}
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + i * 0.08 }}
+                transition={{ delay: 0.15 + i * 0.07 }}
               >
-                <AgentCard agent={agent} />
+                <AgentOutputCard agent={agent} />
               </motion.div>
             ))}
           </div>
 
           <div className="flex-1 min-h-0">
-            <AgentCard agent="synthesis" fill />
+            <AgentOutputCard agent="synthesis" fill />
           </div>
         </motion.div>
 
-        {/* Right — Log feed, fills height and scrolls internally */}
+        {/* Right — status list + activity feed stacked */}
         <motion.div
-          initial={{ opacity: 0, x: 16 }}
+          initial={{ opacity: 0, x: 12 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="min-h-0 overflow-hidden"
+          className="min-h-0 flex flex-col gap-3"
         >
-          <LogPanel />
+          <div className="flex-none">
+            <AgentProgressList />
+          </div>
+          <div className="flex-1 min-h-0 overflow-hidden">
+            <ActivityFeed />
+          </div>
         </motion.div>
       </div>
     </div>
@@ -141,12 +137,12 @@ export default function ValidatePage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-[#080B0F]">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#00FF88] border-t-transparent" />
+        <div className="flex min-h-screen items-center justify-center bg-[#FBF8F3]">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#9B6E2E] border-t-transparent" />
         </div>
       }
     >
-      <ValidateDashboard />
+      <AnalysisDashboard />
     </Suspense>
   );
 }

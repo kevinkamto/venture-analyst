@@ -1,20 +1,28 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Inter } from "next/font/google";
+import { Playfair_Display, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const dmSans = DM_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
+const playfairDisplay = Playfair_Display({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["600", "700"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-mono",
   subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "Startup Validator — AI-powered idea analysis",
-  description: "5 AI agents. Parallel analysis. Real answers.",
+  title: "Venture Analyst — AI-powered startup evaluation",
+  description: "Evaluate your startup idea with five parallel AI agents covering market, competition, risk, monetisation, and synthesis.",
 };
 
 export default function RootLayout({
@@ -25,9 +33,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${playfairDisplay.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#080B0F] text-[#E6EDF3]">
+      <body className="min-h-full flex flex-col bg-[#FBF8F3] text-[#251A0E]">
         {children}
       </body>
     </html>

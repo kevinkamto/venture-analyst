@@ -14,17 +14,17 @@ export function Markdown({ children, className }: Props) {
       remarkPlugins={[remarkGfm]}
       components={{
         h1: ({ children }) => (
-          <h1 className="font-mono text-sm font-bold text-[#E6EDF3] mt-3 first:mt-0">
+          <h1 className="font-display text-sm font-bold text-[#251A0E] mt-3 first:mt-0">
             {children}
           </h1>
         ),
         h2: ({ children }) => (
-          <h2 className="font-mono text-xs font-bold text-[#E6EDF3] mt-2.5 first:mt-0">
+          <h2 className="font-sans text-xs font-bold text-[#251A0E] mt-2.5 first:mt-0">
             {children}
           </h2>
         ),
         h3: ({ children }) => (
-          <h3 className="font-mono text-xs font-semibold text-[#C9D1D9] mt-2 first:mt-0">
+          <h3 className="font-sans text-xs font-semibold text-[#5A4230] mt-2 first:mt-0">
             {children}
           </h3>
         ),
@@ -41,28 +41,28 @@ export function Markdown({ children, className }: Props) {
           <li className="leading-relaxed">{children}</li>
         ),
         strong: ({ children }) => (
-          <strong className="font-semibold text-[#E6EDF3]">{children}</strong>
+          <strong className="font-semibold text-[#251A0E]">{children}</strong>
         ),
         em: ({ children }) => (
-          <em className="italic text-[#C9D1D9]">{children}</em>
+          <em className="italic text-[#5A4230]">{children}</em>
         ),
         pre: ({ children }) => (
-          <pre className="my-1 overflow-x-auto rounded bg-[#161B22] p-2.5">
+          <pre className="my-1 overflow-x-auto rounded-lg bg-[#E8DFC9] p-2.5">
             {children}
           </pre>
         ),
         code: ({ children, className: langClass }) => (
           <code
             className={cn(
-              "font-mono text-[11px] text-[#00FF88]",
-              !langClass && "rounded bg-[#161B22] px-1 py-0.5"
+              "font-mono text-[11px] text-[#9B6E2E]",
+              !langClass && "rounded bg-[#E8DFC9] px-1 py-0.5"
             )}
           >
             {children}
           </code>
         ),
         blockquote: ({ children }) => (
-          <blockquote className="border-l-2 border-[#388BFD] pl-3 text-[#8B949E]">
+          <blockquote className="border-l-2 border-[#CDBFA3] pl-3 text-[#967860]">
             {children}
           </blockquote>
         ),
@@ -71,24 +71,24 @@ export function Markdown({ children, className }: Props) {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[#388BFD] underline hover:opacity-80"
+            className="text-[#4A5E72] underline hover:opacity-80"
           >
             {children}
           </a>
         ),
-        hr: () => <hr className="border-[#21262D]" />,
+        hr: () => <hr className="border-[#E8DFC9]" />,
         table: ({ children }) => (
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-xs">{children}</table>
           </div>
         ),
         th: ({ children }) => (
-          <th className="border border-[#21262D] bg-[#161B22] px-3 py-1.5 text-left font-mono font-semibold text-[#E6EDF3]">
+          <th className="border border-[#CDBFA3] bg-[#E8DFC9] px-3 py-1.5 text-left font-sans font-semibold text-[#251A0E]">
             {children}
           </th>
         ),
         td: ({ children }) => (
-          <td className="border border-[#21262D] px-3 py-1.5">{children}</td>
+          <td className="border border-[#CDBFA3] px-3 py-1.5">{children}</td>
         ),
       }}
     >

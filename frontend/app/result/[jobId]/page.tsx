@@ -3,8 +3,8 @@
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Maximize2, X } from "lucide-react";
-import { ScoreCard } from "@/components/ScoreCard";
+import { Expand, X } from "lucide-react";
+import { ValidationScore } from "@/components/report/ValidationScore";
 import { Markdown } from "@/components/Markdown";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { getResult, type ResultData } from "@/lib/api";
@@ -15,20 +15,20 @@ const SECTION_LABELS: Record<
   keyof Pick<ResultData, "market" | "competitors" | "risks" | "monetisation">,
   string
 > = {
-  market: "MARKET OPPORTUNITY",
-  competitors: "COMPETITOR ANALYSIS",
-  risks: "KEY RISKS",
-  monetisation: "MONETISATION STRATEGY",
+  market: "Market Opportunity",
+  competitors: "Competitor Analysis",
+  risks: "Key Risks",
+  monetisation: "Monetisation Strategy",
 };
 
 const SECTION_COLORS: Record<string, string> = {
-  market: "#00FF88",
-  competitors: "#388BFD",
-  risks: "#F0883E",
-  monetisation: "#8B949E",
+  market: "#9B6E2E",
+  competitors: "#4A5E72",
+  risks: "#B84D26",
+  monetisation: "#2E6B5A",
 };
 
-function FullscreenModal({
+function ExpandedModal({
   label,
   content,
   color,
@@ -53,25 +53,25 @@ function FullscreenModal({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.15 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-10"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#251A0E]/40 backdrop-blur-sm p-4 md:p-10"
       onClick={onClose}
     >
       <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
+        initial={{ scale: 0.96, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
+        exit={{ scale: 0.96, opacity: 0 }}
         transition={{ duration: 0.15 }}
-        className="relative flex flex-col w-full max-w-4xl max-h-[85vh] rounded-xl border border-[#21262D] bg-[#0D1117] shadow-2xl overflow-hidden"
+        className="relative flex flex-col w-full max-w-3xl max-h-[85vh] rounded-2xl border border-[#CDBFA3] bg-[#FBF8F3] shadow-xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#21262D] flex-none">
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8DFC9] flex-none">
+          <div className="flex items-center gap-2.5">
             <span
               className="h-2 w-2 rounded-full"
               style={{ backgroundColor: color }}
             />
             <span
-              className="font-mono text-xs font-bold tracking-widest"
+              className="font-sans text-sm font-semibold"
               style={{ color }}
             >
               {label}
@@ -79,13 +79,13 @@ function FullscreenModal({
           </div>
           <button
             onClick={onClose}
-            className="text-[#484F58] hover:text-[#8B949E] transition-colors"
-            aria-label="Close fullscreen"
+            className="text-[#967860] hover:text-[#5A4230] transition-colors"
+            aria-label="Close"
           >
             <X size={16} />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto px-6 py-5 text-sm text-[#8B949E]">
+        <div className="flex-1 overflow-y-auto px-6 py-5 text-sm text-[#5A4230]">
           <Markdown>{content}</Markdown>
         </div>
       </motion.div>
@@ -93,7 +93,7 @@ function FullscreenModal({
   );
 }
 
-function ResultSection({
+function ReportSection({
   label,
   content,
   color,
@@ -104,41 +104,41 @@ function ResultSection({
   color: string;
   delay: number;
 }) {
-  const [fullscreen, setFullscreen] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay }}
       >
-        <Card className="border-[#21262D] bg-[#0D1117] h-full">
-          <CardHeader className="pb-0 pt-0 px-4">
+        <Card className="border-[#CDBFA3] bg-[#F3EDE0] h-full">
+          <CardHeader className="pb-0 pt-3 px-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span
-                  className="h-1.5 w-1.5 rounded-full"
+                  className="h-2 w-2 rounded-full"
                   style={{ backgroundColor: color }}
                 />
                 <span
-                  className="font-mono text-[10px] font-bold tracking-widest"
+                  className="font-sans text-[11px] font-semibold"
                   style={{ color }}
                 >
                   {label}
                 </span>
               </div>
               <button
-                onClick={() => setFullscreen(true)}
-                className="text-[#484F58] hover:text-[#8B949E] transition-colors"
-                aria-label="Expand to fullscreen"
+                onClick={() => setExpanded(true)}
+                className="text-[#CDBFA3] hover:text-[#967860] transition-colors"
+                aria-label="Expand section"
               >
-                <Maximize2 size={13} />
+                <Expand size={13} />
               </button>
             </div>
           </CardHeader>
-          <CardContent className="px-4 pb-1 pt-1">
-            <div className="max-h-24 overflow-y-auto text-xs text-[#8B949E]">
+          <CardContent className="px-4 pb-3 pt-2">
+            <div className="max-h-28 overflow-y-auto text-xs text-[#5A4230]">
               <Markdown>{content}</Markdown>
             </div>
           </CardContent>
@@ -146,12 +146,12 @@ function ResultSection({
       </motion.div>
 
       <AnimatePresence>
-        {fullscreen && (
-          <FullscreenModal
+        {expanded && (
+          <ExpandedModal
             label={label}
             content={content}
             color={color}
-            onClose={() => setFullscreen(false)}
+            onClose={() => setExpanded(false)}
           />
         )}
       </AnimatePresence>
@@ -165,7 +165,7 @@ export default function ResultPage({ params }: Props) {
   const [result, setResult] = useState<ResultData | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-  const [synthesisFullscreen, setSynthesisFullscreen] = useState(false);
+  const [synthesisExpanded, setSynthesisExpanded] = useState(false);
 
   useEffect(() => {
     let retries = 0;
@@ -181,7 +181,7 @@ export default function ResultPage({ params }: Props) {
         if (retries < MAX) {
           setTimeout(fetchResult, 1500);
         } else {
-          setError("Result not available. The analysis may still be running.");
+          setError("The report is not available yet. The analysis may still be running.");
           setLoading(false);
         }
       }
@@ -192,10 +192,10 @@ export default function ResultPage({ params }: Props) {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#080B0F]">
-        <div className="text-center font-mono">
-          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-2 border-[#00FF88] border-t-transparent mx-auto" />
-          <p className="text-[#484F58] text-xs">Loading report...</p>
+      <div className="flex min-h-screen items-center justify-center bg-[#FBF8F3]">
+        <div className="text-center">
+          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-2 border-[#9B6E2E] border-t-transparent mx-auto" />
+          <p className="text-[#967860] text-sm font-sans">Loading report…</p>
         </div>
       </div>
     );
@@ -203,12 +203,12 @@ export default function ResultPage({ params }: Props) {
 
   if (error || !result) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#080B0F]">
-        <div className="text-center font-mono">
-          <p className="text-[#F85149] text-sm mb-4">{error}</p>
+      <div className="flex min-h-screen items-center justify-center bg-[#FBF8F3]">
+        <div className="text-center">
+          <p className="text-[#B84D26] text-sm mb-4 font-sans">{error}</p>
           <button
             onClick={() => router.push("/")}
-            className="text-[#00FF88] text-xs underline"
+            className="text-[#9B6E2E] text-sm underline font-sans"
           >
             Start a new analysis →
           </button>
@@ -225,108 +225,104 @@ export default function ResultPage({ params }: Props) {
     delay: number;
   }> = [
     { key: "market", delay: 0.3 },
-    { key: "competitors", delay: 0.4 },
-    { key: "risks", delay: 0.5 },
-    { key: "monetisation", delay: 0.6 },
+    { key: "competitors", delay: 0.38 },
+    { key: "risks", delay: 0.46 },
+    { key: "monetisation", delay: 0.54 },
   ];
 
   return (
-    <div className="bg-[#080B0F] flex flex-col px-4 pt-6 pb-4 md:px-8 lg:px-16">
-      <div className="mx-auto w-full max-w-5xl flex flex-col flex-1 min-h-0">
+    <div className="bg-[#FBF8F3] min-h-screen flex flex-col px-4 pt-6 pb-8 md:px-8 lg:px-16">
+      <div className="mx-auto w-full max-w-4xl flex flex-col flex-1 min-h-0 gap-5">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -8 }}
+          initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex-none mb-4 flex items-center gap-3"
+          className="flex items-center gap-3"
         >
           <button
             onClick={() => router.push("/")}
-            className="font-mono text-xs text-[#484F58] hover:text-[#8B949E] transition-colors"
+            className="font-sans text-xs text-[#967860] hover:text-[#5A4230] transition-colors"
           >
-            ← HOME
+            ← Home
           </button>
-          <span className="text-[#21262D]">|</span>
-          <span className="font-mono text-xs text-[#484F58]">
-            VALIDATION REPORT · {jobId.slice(0, 8)}
+          <span className="text-[#CDBFA3]">·</span>
+          <span className="font-sans text-xs text-[#967860]">
+            Report · {jobId.slice(0, 8)}
           </span>
         </motion.div>
 
-        {/* Score card */}
-        <div className="flex-none mb-4">
-          <ScoreCard score={result.score} verdict={result.verdict} />
+        {/* Score */}
+        <ValidationScore score={result.score} verdict={result.verdict} />
+
+        {/* Four sections 2×2 */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {sections.map(({ key, delay }) => (
+            <ReportSection
+              key={key}
+              label={SECTION_LABELS[key]}
+              content={result[key]}
+              color={SECTION_COLORS[key]}
+              delay={delay}
+            />
+          ))}
         </div>
 
-        {/* Four sections 2x2 + Synthesis — fills remaining height */}
-        <div className="flex-1 min-h-0 space-y-4 pb-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 p-1">
-            {sections.map(({ key, delay }) => (
-              <ResultSection
-                key={key}
-                label={SECTION_LABELS[key]}
-                content={result[key]}
-                color={SECTION_COLORS[key]}
-                delay={delay}
-              />
-            ))}
-          </div>
-
-          {/* Synthesis */}
-          {result.synthesis && (
-            <>
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
-                className="rounded-lg border border-[#00FF88]/20 bg-[#0D1117] p-6"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#00FF88]" />
-                    <span className="font-mono text-[10px] font-bold text-[#00FF88] tracking-widest">
-                      SYNTHESIS — EXECUTIVE SUMMARY
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => setSynthesisFullscreen(true)}
-                    className="text-[#484F58] hover:text-[#00FF88] transition-colors"
-                    aria-label="Expand to fullscreen"
-                  >
-                    <Maximize2 size={13} />
-                  </button>
-                </div>
-                <div className="max-h-48 overflow-y-auto text-sm text-[#E6EDF3]">
-                  <Markdown>{result.synthesis}</Markdown>
-                </div>
-              </motion.div>
-
-              <AnimatePresence>
-                {synthesisFullscreen && (
-                  <FullscreenModal
-                    label="SYNTHESIS — EXECUTIVE SUMMARY"
-                    content={result.synthesis}
-                    color="#00FF88"
-                    onClose={() => setSynthesisFullscreen(false)}
-                  />
-                )}
-              </AnimatePresence>
-            </>
-          )}
-
-          {/* Actions */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="flex gap-4 justify-center pt-2"
-          >
-            <button
-              onClick={() => router.push("/")}
-              className="h-10 rounded-lg border border-[#00FF88]/30 px-6 font-mono text-xs text-[#00FF88] hover:bg-[#00FF88]/5 transition-colors"
+        {/* Synthesis */}
+        {result.synthesis && (
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.62 }}
+              className="rounded-xl border border-[#9B6E2E]/25 bg-[#F3EDE0] p-6"
             >
-              VALIDATE ANOTHER IDEA →
-            </button>
-          </motion.div>
-        </div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="h-2 w-2 rounded-full bg-[#9B6E2E]" />
+                  <span className="font-sans text-xs font-semibold text-[#9B6E2E]">
+                    Synthesis — Executive Summary
+                  </span>
+                </div>
+                <button
+                  onClick={() => setSynthesisExpanded(true)}
+                  className="text-[#CDBFA3] hover:text-[#9B6E2E] transition-colors"
+                  aria-label="Expand synthesis"
+                >
+                  <Expand size={13} />
+                </button>
+              </div>
+              <div className="max-h-52 overflow-y-auto text-sm text-[#251A0E]">
+                <Markdown>{result.synthesis}</Markdown>
+              </div>
+            </motion.div>
+
+            <AnimatePresence>
+              {synthesisExpanded && (
+                <ExpandedModal
+                  label="Synthesis — Executive Summary"
+                  content={result.synthesis}
+                  color="#9B6E2E"
+                  onClose={() => setSynthesisExpanded(false)}
+                />
+              )}
+            </AnimatePresence>
+          </>
+        )}
+
+        {/* Action */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.75 }}
+          className="flex justify-center pt-2"
+        >
+          <button
+            onClick={() => router.push("/")}
+            className="h-10 rounded-xl border border-[#CDBFA3] px-6 font-sans text-sm text-[#9B6E2E] hover:bg-[#9B6E2E]/5 transition-colors"
+          >
+            Analyse another idea →
+          </button>
+        </motion.div>
       </div>
     </div>
   );
