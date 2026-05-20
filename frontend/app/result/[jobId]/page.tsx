@@ -16,9 +16,9 @@ const SECTION_LABELS: Record<
   string
 > = {
   market: "Market Opportunity",
-  competitors: "Competitor Analysis",
-  risks: "Key Risks",
-  monetisation: "Monetisation Strategy",
+  competitors: "Competitive Landscape",
+  risks: "Risk Factors",
+  monetisation: "Revenue Strategy",
 };
 
 const SECTION_COLORS: Record<string, string> = {
@@ -80,7 +80,7 @@ function ExpandedModal({
           <button
             onClick={onClose}
             className="text-[#967860] hover:text-[#5A4230] transition-colors"
-            aria-label="Close"
+            aria-label="Dismiss"
           >
             <X size={16} />
           </button>
@@ -131,7 +131,7 @@ function ReportSection({
               <button
                 onClick={() => setExpanded(true)}
                 className="text-[#CDBFA3] hover:text-[#967860] transition-colors"
-                aria-label="Expand section"
+                aria-label="Read in full"
               >
                 <Expand size={13} />
               </button>
@@ -181,7 +181,7 @@ export default function ResultPage({ params }: Props) {
         if (retries < MAX) {
           setTimeout(fetchResult, 1500);
         } else {
-          setError("The report is not available yet. The analysis may still be running.");
+          setError("Results aren't ready yet — agents may still be running.");
           setLoading(false);
         }
       }
@@ -195,7 +195,7 @@ export default function ResultPage({ params }: Props) {
       <div className="flex min-h-screen items-center justify-center bg-[#FBF8F3]">
         <div className="text-center">
           <div className="mb-4 h-8 w-8 animate-spin rounded-full border-2 border-[#9B6E2E] border-t-transparent mx-auto" />
-          <p className="text-[#967860] text-sm font-sans">Loading report…</p>
+          <p className="text-[#967860] text-sm font-sans">Fetching results…</p>
         </div>
       </div>
     );
@@ -210,7 +210,7 @@ export default function ResultPage({ params }: Props) {
             onClick={() => router.push("/")}
             className="text-[#9B6E2E] text-sm underline font-sans"
           >
-            Start a new analysis →
+            Submit a new idea →
           </button>
         </div>
       </div>
@@ -243,11 +243,11 @@ export default function ResultPage({ params }: Props) {
             onClick={() => router.push("/")}
             className="font-sans text-xs text-[#967860] hover:text-[#5A4230] transition-colors"
           >
-            ← Home
+            ← Back
           </button>
           <span className="text-[#CDBFA3]">·</span>
           <span className="font-sans text-xs text-[#967860]">
-            Report · {jobId.slice(0, 8)}
+            Analysis · {jobId.slice(0, 8)}
           </span>
         </motion.div>
 
@@ -280,13 +280,13 @@ export default function ResultPage({ params }: Props) {
                 <div className="flex items-center gap-2.5">
                   <span className="h-2 w-2 rounded-full bg-[#9B6E2E]" />
                   <span className="font-sans text-xs font-semibold text-[#9B6E2E]">
-                    Synthesis — Executive Summary
+                    Executive Summary
                   </span>
                 </div>
                 <button
                   onClick={() => setSynthesisExpanded(true)}
                   className="text-[#CDBFA3] hover:text-[#9B6E2E] transition-colors"
-                  aria-label="Expand synthesis"
+                  aria-label="Read synthesis in full"
                 >
                   <Expand size={13} />
                 </button>
@@ -299,7 +299,7 @@ export default function ResultPage({ params }: Props) {
             <AnimatePresence>
               {synthesisExpanded && (
                 <ExpandedModal
-                  label="Synthesis — Executive Summary"
+                  label="Executive Summary"
                   content={result.synthesis}
                   color="#9B6E2E"
                   onClose={() => setSynthesisExpanded(false)}
@@ -320,7 +320,7 @@ export default function ResultPage({ params }: Props) {
             onClick={() => router.push("/")}
             className="h-10 rounded-xl border border-[#CDBFA3] px-6 font-sans text-sm text-[#9B6E2E] hover:bg-[#9B6E2E]/5 transition-colors"
           >
-            Analyse another idea →
+            Evaluate another idea →
           </button>
         </motion.div>
       </div>

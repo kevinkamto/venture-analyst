@@ -48,6 +48,18 @@ export default function LandingPage() {
         <div className="h-150 w-150 rounded-full bg-[#9B6E2E]/6 blur-[140px]" />
       </div>
 
+      {/* Brand wordmark */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.05, duration: 0.4 }}
+        className="absolute top-6 left-6 z-10 flex items-center gap-1.5"
+      >
+        <span className="inline-block h-2 w-2 rotate-45 bg-[#9B6E2E]" />
+        <span className="font-display text-sm italic font-semibold text-[#251A0E] leading-none">Venture</span>
+        <span className="font-sans text-sm font-medium text-[#5A4230] leading-none">Analyst</span>
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -63,7 +75,7 @@ export default function LandingPage() {
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-[#CDBFA3] bg-[#F3EDE0] px-4 py-1.5 text-xs font-sans font-medium text-[#9B6E2E]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#9B6E2E] animate-pulse" />
-            Five parallel AI agents
+            Five specialist agents
           </span>
         </motion.div>
 
@@ -74,8 +86,8 @@ export default function LandingPage() {
           transition={{ delay: 0.18 }}
           className="mb-4 text-center font-display text-4xl font-bold leading-tight tracking-tight text-[#251A0E] md:text-5xl"
         >
-          Is your idea{" "}
-          <span className="italic text-[#9B6E2E]">worth building?</span>
+          Not every idea{" "}
+          <span className="italic text-[#9B6E2E]">is worth building.</span>
         </motion.h1>
 
         <motion.p
@@ -84,9 +96,9 @@ export default function LandingPage() {
           transition={{ delay: 0.26 }}
           className="mb-9 text-center font-sans text-[#5A4230] text-base leading-relaxed"
         >
-          Describe your startup idea and five specialised agents will analyse
-          it — market opportunity, competition, risks, monetisation, and a
-          final synthesis — all in parallel.
+          Describe the concept. Five analysts — market, competition, risk,
+          monetisation, synthesis — will scrutinise it in parallel and
+          return a scored verdict.
         </motion.p>
 
         {/* Form */}
@@ -100,7 +112,7 @@ export default function LandingPage() {
           <Textarea
             value={idea}
             onChange={(e) => setIdea(e.target.value)}
-            placeholder="e.g. A subscription service that delivers curated secondhand books based on a reader's taste profile…"
+            placeholder="e.g. A platform that matches independent coffee shops with local roasters, handling discovery, orders, and contracts…"
             className="min-h-32.5 resize-none rounded-xl border-[#CDBFA3] bg-[#F3EDE0] font-sans text-[#251A0E] placeholder:text-[#967860] focus:border-[#9B6E2E]/60 text-sm leading-relaxed shadow-sm"
             disabled={loading}
           />
@@ -119,11 +131,11 @@ export default function LandingPage() {
             {loading ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#FBF8F3] border-t-transparent" />
-                Starting analysis…
+                Spinning up agents…
               </span>
             ) : (
               <span className="flex items-center justify-center gap-2">
-                Analyse this idea
+                Run the analysis
                 <span className="transition-transform group-hover:translate-x-0.5">→</span>
               </span>
             )}
@@ -136,7 +148,7 @@ export default function LandingPage() {
           transition={{ delay: 0.55 }}
           className="mt-7 text-center font-sans text-xs text-[#967860]"
         >
-          Market · Competitors · Risks · Monetisation · Synthesis
+          Market · Competition · Risk · Revenue · Synthesis
         </motion.p>
       </motion.div>
     </main>

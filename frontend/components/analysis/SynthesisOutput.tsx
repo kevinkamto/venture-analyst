@@ -29,11 +29,11 @@ export function SynthesisOutput() {
       <div className="flex items-center gap-3 px-5 py-3">
         <span className="h-2 w-2 rounded-full bg-[#9B6E2E] animate-pulse" />
         <span className="font-sans text-xs font-semibold text-[#9B6E2E]">
-          Synthesis — Final Analysis
+          Synthesis
         </span>
         {status === "complete" && (
           <span className="ml-auto font-mono text-[10px] text-[#967860]">
-            complete
+            done
           </span>
         )}
       </div>

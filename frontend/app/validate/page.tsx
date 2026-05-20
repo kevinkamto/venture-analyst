@@ -35,12 +35,12 @@ function AnalysisDashboard() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#FBF8F3]">
         <div className="text-center">
-          <p className="text-[#B84D26] text-sm mb-4 font-sans">No analysis job found.</p>
+          <p className="text-[#B84D26] text-sm mb-4 font-sans">No active job — nothing to show here.</p>
           <button
             onClick={() => router.push("/")}
             className="text-[#9B6E2E] text-sm underline font-sans"
           >
-            Start a new analysis →
+            Submit a new idea →
           </button>
         </div>
       </div>
@@ -60,24 +60,24 @@ function AnalysisDashboard() {
             onClick={() => router.push("/")}
             className="font-sans text-xs text-[#967860] hover:text-[#5A4230] transition-colors"
           >
-            ← Home
+            ← Back
           </button>
           <span className="text-[#CDBFA3]">·</span>
           <h1 className="font-sans text-sm font-semibold text-[#251A0E]">
-            Analysis in progress
+            Agents working
           </h1>
         </div>
         <div className="flex items-center gap-3">
           {isRunning && (
             <span className="flex items-center gap-1.5 font-sans text-xs text-[#9B6E2E]">
               <span className="h-1.5 w-1.5 rounded-full bg-[#9B6E2E] animate-pulse" />
-              Running
+              Live
             </span>
           )}
           {!isRunning && synthStatus === "complete" && (
             <span className="flex items-center gap-1.5 font-sans text-xs text-[#2E6B5A]">
               <span className="h-1.5 w-1.5 rounded-full bg-[#2E6B5A]" />
-              Preparing report…
+              Compiling findings…
             </span>
           )}
           <span className="font-mono text-[10px] text-[#CDBFA3]">

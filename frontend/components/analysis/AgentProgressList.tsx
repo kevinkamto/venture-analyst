@@ -48,14 +48,14 @@ function AgentRow({ agent }: { agent: AgentKey }) {
   const elapsed = useElapsed(startedAt);
 
   const statusLine = () => {
-    if (status === "idle") return <span className="text-[#CDBFA3]">waiting</span>;
+    if (status === "idle") return <span className="text-[#CDBFA3]">queued</span>;
     if (status === "thinking")
       return <span>thinking{elapsed !== null ? ` · ${elapsed}s` : ""}</span>;
     if (status === "active")
       return <span>streaming{elapsed !== null ? ` · ${elapsed}s` : ""}</span>;
     if (status === "complete")
-      return <span>complete{elapsed !== null ? ` · ${elapsed}s` : ""}</span>;
-    return <span>error</span>;
+      return <span>done{elapsed !== null ? ` · ${elapsed}s` : ""}</span>;
+    return <span>failed</span>;
   };
 
   return (
@@ -102,7 +102,7 @@ export function AgentProgressList() {
         </span>
         {activeCount > 0 && (
           <span className="font-mono text-[11px] text-[#9B6E2E]">
-            {activeCount} running
+            {activeCount} active
           </span>
         )}
       </div>

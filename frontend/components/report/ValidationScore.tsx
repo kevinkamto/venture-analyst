@@ -38,7 +38,7 @@ export function ValidationScore({ score, verdict }: Props) {
       <div className="flex items-end justify-between mb-5">
         <div>
           <p className="font-sans text-[11px] text-[#967860] tracking-widest uppercase mb-1">
-            Validation Score
+            Score
           </p>
           <div className="flex items-baseline gap-1">
             <motion.span

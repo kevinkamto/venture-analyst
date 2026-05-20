@@ -22,11 +22,11 @@ const STATUS_BADGE: Record<AgentStatus, string> = {
 };
 
 const STATUS_LABELS: Record<AgentStatus, string> = {
-  idle: "Idle",
+  idle: "Waiting",
   thinking: "Thinking",
-  active: "Active",
+  active: "Streaming",
   complete: "Done",
-  error: "Error",
+  error: "Failed",
 };
 
 const STATUS_DOT: Record<AgentStatus, string> = {
@@ -108,7 +108,7 @@ function ExpandedModal({
           <button
             onClick={onClose}
             className="text-[#967860] hover:text-[#5A4230] transition-colors"
-            aria-label="Close expanded view"
+            aria-label="Dismiss"
           >
             <X size={16} />
           </button>
@@ -132,7 +132,7 @@ function ExpandedModal({
           )}
           {status === "thinking" && !output && (
             <div className="font-sans text-xs text-[#4A5E72]">
-              <span className="animate-pulse">Thinking…</span>
+              <span className="animate-pulse">Gathering context…</span>
             </div>
           )}
         </div>
@@ -198,7 +198,7 @@ export function AgentOutputCard({ agent, fill }: Props) {
             )}
             {tokenCount > 0 && (
               <span className="font-mono text-[10px] text-[#967860]">
-                {tokenCount} tok
+                {tokenCount} t
               </span>
             )}
             <Badge
@@ -210,7 +210,7 @@ export function AgentOutputCard({ agent, fill }: Props) {
             <button
               onClick={() => setExpanded(true)}
               className="text-[#CDBFA3] hover:text-[#967860] transition-colors"
-              aria-label="Expand"
+              aria-label="Read in full"
             >
               <Expand size={12} />
             </button>
@@ -254,7 +254,7 @@ export function AgentOutputCard({ agent, fill }: Props) {
 
                 {status === "thinking" && !output && (
                   <div className="flex items-center gap-1.5 font-sans text-xs text-[#4A5E72]">
-                    <span className="animate-pulse">Thinking…</span>
+                    <span className="animate-pulse">Gathering context…</span>
                   </div>
                 )}
               </CardContent>
