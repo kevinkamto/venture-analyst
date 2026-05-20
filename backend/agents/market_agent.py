@@ -14,7 +14,7 @@ Analyze the startup idea and provide a comprehensive market analysis covering:
 - Market trends and growth trajectory (CAGR where relevant)
 - Key market drivers, tailwinds, and headwinds
 - Geographic opportunities and market maturity
-- Timing assessment — is now the right time?
+- Timing assessment - is now the right time?
 
 Be specific with numbers and cite data from the research context provided."""
 

@@ -101,7 +101,7 @@ Synthesize all of the above into a final validation report."""
         verdict = _extract_verdict(output)
 
         await emit(queue, agent, "complete", output)
-        logger.info(f"[{agent}] complete — score={score}, verdict={verdict}")
+        logger.info(f"[{agent}] complete - score={score}, verdict={verdict}")
         return output, score, verdict
     except Exception:
         logger.exception(f"[{agent}] failed")

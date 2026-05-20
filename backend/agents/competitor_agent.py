@@ -11,7 +11,7 @@ Analyze the startup idea and provide a comprehensive competitor analysis coverin
 - Top 5–8 direct competitors with brief descriptions
 - Indirect competitors and substitute solutions
 - Competitive landscape map (positioning, pricing tiers)
-- Feature gap analysis — what competitors are missing
+- Feature gap analysis - what competitors are missing
 - Market share distribution (estimates)
 - Competitor weaknesses and exploitable gaps
 - Your recommended positioning strategy

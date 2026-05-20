@@ -53,7 +53,7 @@ async def run_validation(idea: str, job_id: str, queue: asyncio.Queue[Any]) -> N
 
         done_event = AgentEvent(agent="system", type="done", data="")
         await queue.put(done_event)
-        logger.info(f"[orchestrator] job {job_id} complete — score={score}")
+        logger.info(f"[orchestrator] job {job_id} complete - score={score}")
 
     except Exception:
         logger.exception(f"[orchestrator] job {job_id} failed")

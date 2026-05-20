@@ -1,8 +1,8 @@
 # Venture Analyst
 
-> Five AI agents dissect your startup idea in parallel — market, competition, risk, monetisation, synthesis — and return a scored verdict in real time.
+> Five AI agents dissect your startup idea in parallel - market, competition, risk, monetisation, synthesis - and return a scored verdict in real time.
 
-![Landing — submit your idea](images/thumb.png)
+![Landing - submit your idea](images/thumb.png)
 
 ---
 
@@ -23,7 +23,7 @@ idea submitted
                          score + verdict
 ```
 
-Events stream over SSE as they happen — thinking, tool calls, tokens, completion — so the UI updates live without polling.
+Events stream over SSE as they happen - thinking, tool calls, tokens, completion - so the UI updates live without polling.
 
 ---
 
@@ -60,7 +60,7 @@ Open `http://localhost:3000`.
 
 ---
 
-![Final report — scored verdict](images/ending.png)
+![Final report - scored verdict](images/ending.png)
 
 ## API
 
@@ -84,9 +84,9 @@ Event types in order: `thinking` → `tool_call` → `tool_result` → `token` �
 
 ## Stack
 
-**Backend** — FastAPI · Uvicorn · Pydantic v2 · OpenAI · SSE-Starlette · Tavily · Loguru · Ruff · Mypy
+**Backend** - FastAPI · Uvicorn · Pydantic v2 · OpenAI · SSE-Starlette · Tavily · Loguru · Ruff · Mypy
 
-**Frontend** — Next.js App Router · Turbopack · shadcn/ui · Tailwind CSS · Zustand · Framer Motion
+**Frontend** - Next.js App Router · Turbopack · shadcn/ui · Tailwind CSS · Zustand · Framer Motion
 
 ---
 
@@ -125,9 +125,9 @@ frontend/
 ## Linting
 
 ```bash
-# backend — ruff + mypy in one shot
+# backend - ruff + mypy in one shot
 cd backend && uv run python lint.py
 
-# frontend — ESLint
+# frontend - ESLint
 cd frontend && pnpm lint
 ```

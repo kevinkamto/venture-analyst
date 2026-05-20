@@ -29,7 +29,7 @@ Analyze the startup idea and identify all material risks across four dimensions:
 - Go-to-market complexity
 
 For each risk, rate severity (High/Medium/Low) and provide a mitigation strategy.
-Be honest and thorough — founders need real warnings, not false comfort."""
+Be honest and thorough - founders need real warnings, not false comfort."""
 
 AGENT: AgentName = "risk"
 

@@ -2,10 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { getStreamUrl } from "@/lib/api";
-import {
-  useAgentStore,
-  type AgentKey,
-} from "@/store/agentStore";
+import { useAgentStore, type AgentKey } from "@/store/agentStore";
 
 type RawEvent = {
   agent: string;
@@ -59,7 +56,7 @@ export function useAgentStream(jobId: string | null) {
         const type = event.type;
         const data = event.data;
 
-        // Tokens are too frequent to log individually — skip them
+        // Tokens are too frequent to log individually - skip them
         if (type !== "token") {
           addLog({ time: now(), agent: event.agent, type, message: data });
         }

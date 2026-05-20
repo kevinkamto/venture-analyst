@@ -13,7 +13,7 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 
-# Environment — never commit real keys
+# Environment - never commit real keys
 .env
 
 # Runtime logs

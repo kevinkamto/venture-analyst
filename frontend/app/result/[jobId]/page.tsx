@@ -70,10 +70,7 @@ function ExpandedModal({
               className="h-2 w-2 rounded-full"
               style={{ backgroundColor: color }}
             />
-            <span
-              className="font-sans text-sm font-semibold"
-              style={{ color }}
-            >
+            <span className="font-sans text-sm font-semibold" style={{ color }}>
               {label}
             </span>
           </div>
@@ -181,7 +178,7 @@ export default function ResultPage({ params }: Props) {
         if (retries < MAX) {
           setTimeout(fetchResult, 1500);
         } else {
-          setError("Results aren't ready yet — agents may still be running.");
+          setError("Results aren't ready yet - agents may still be running.");
           setLoading(false);
         }
       }

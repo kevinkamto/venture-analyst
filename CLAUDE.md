@@ -1,4 +1,4 @@
-# Venture Analyst — Portfolio Project Spec
+# Venture Analyst - Portfolio Project Spec
 
 ## Stack
 
@@ -136,7 +136,7 @@ GET  /api/stream/{job_id}   # SSE stream of AgentEvent
 GET  /api/result/{job_id}   # → ValidationResult
 ```
 
-### Pydantic Schemas — `schemas/`
+### Pydantic Schemas - `schemas/`
 
 ```python
 # schemas/events.py
@@ -193,16 +193,16 @@ Event types: `thinking` | `token` | `tool_call` | `tool_result` | `complete` | `
 
 ```python
 async def run_validation(idea: str, job_id: str, queue: asyncio.Queue):
-    # Step 1 — run 4 agents in parallel
+    # Step 1 - run 4 agents in parallel
     await asyncio.gather(
         run_market_agent(idea, queue),
         run_competitor_agent(idea, queue),
         run_risk_agent(idea, queue),
         run_monetisation_agent(idea, queue),
     )
-    # Step 2 — synthesis agent after all complete
+    # Step 2 - synthesis agent after all complete
     await run_synthesis_agent(all_outputs, queue)
-    # Step 3 — emit done
+    # Step 3 - emit done
     await queue.put({ "agent": "system", "type": "done", "data": "" })
 ```
 
@@ -319,7 +319,7 @@ export default nextConfig
 }
 ```
 
-### Zustand Store — `store/agentStore.ts`
+### Zustand Store - `store/agentStore.ts`
 
 ```typescript
 type AgentStatus = 'idle' | 'thinking' | 'active' | 'complete' | 'error'
@@ -353,7 +353,7 @@ type Store = {
 }
 ```
 
-### SSE Hook — `hooks/useAgentStream.ts`
+### SSE Hook - `hooks/useAgentStream.ts`
 
 ```typescript
 export function useAgentStream(jobId: string | null) {
@@ -371,19 +371,19 @@ export function useAgentStream(jobId: string | null) {
 
 ### Theme: **Warm Parchment Studio**
 
-The UI should feel like a thoughtful analyst's workspace — warm, legible, and calm. Not a dark terminal or neon dashboard. Think a well-designed research report or a premium strategy consultant's tool. Light backgrounds, warm earth tones, serif display type.
+The UI should feel like a thoughtful analyst's workspace - warm, legible, and calm. Not a dark terminal or neon dashboard. Think a well-designed research report or a premium strategy consultant's tool. Light backgrounds, warm earth tones, serif display type.
 
 ### Colors
 
 ```css
 --bg-base:        #FBF8F3;   /* warm off-white cream */
---bg-surface:     #F3EDE0;   /* warm beige — card/panel background */
---bg-elevated:    #E8DFC9;   /* deeper beige — elevated elements */
+--bg-surface:     #F3EDE0;   /* warm beige - card/panel background */
+--bg-elevated:    #E8DFC9;   /* deeper beige - elevated elements */
 --border:         #CDBFA3;   /* tan/caramel border */
---accent-amber:   #9B6E2E;   /* warm amber brown — primary CTA, market agent */
---accent-teal:    #2E6B5A;   /* forest teal — complete state, monetisation agent */
---accent-rust:    #B84D26;   /* warm rust — errors, risk agent */
---accent-slate:   #4A5E72;   /* muted slate blue — thinking state, competitor agent */
+--accent-amber:   #9B6E2E;   /* warm amber brown - primary CTA, market agent */
+--accent-teal:    #2E6B5A;   /* forest teal - complete state, monetisation agent */
+--accent-rust:    #B84D26;   /* warm rust - errors, risk agent */
+--accent-slate:   #4A5E72;   /* muted slate blue - thinking state, competitor agent */
 --text-primary:   #251A0E;   /* very dark brown */
 --text-secondary: #5A4230;   /* medium warm brown */
 --text-muted:     #967860;   /* muted caramel */
@@ -392,9 +392,9 @@ The UI should feel like a thoughtful analyst's workspace — warm, legible, and 
 ### Typography
 
 ```
-Display/Headlines: "Playfair Display" — serif, intellectual weight
-Body/UI:           "DM Sans" — humanist sans, clean and approachable
-Data/Logs:         "JetBrains Mono" — monospace only for token counts, log timestamps, IDs
+Display/Headlines: "Playfair Display" - serif, intellectual weight
+Body/UI:           "DM Sans" - humanist sans, clean and approachable
+Data/Logs:         "JetBrains Mono" - monospace only for token counts, log timestamps, IDs
 ```
 
 Import via `next/font/google`.
@@ -432,7 +432,7 @@ synthesis       → accent-amber  (#9B6E2E)
 
 ## 4. Pages
 
-### `app/page.tsx` — Landing
+### `app/page.tsx` - Landing
 
 Layout:
 
@@ -444,11 +444,11 @@ Layout:
 - Subtle dot-pattern background overlay
 - On submit → POST `/api/validate` → redirect to `/validate?job={jobId}`
 
-### `app/validate/page.tsx` — Live Dashboard
+### `app/validate/page.tsx` - Live Dashboard
 
 Two-column layout on desktop, stacked on mobile:
 
-**Left column (flexible) — Agent Output Cards**
+**Left column (flexible) - Agent Output Cards**
 
 ```
 ┌─────────────────┐  ┌─────────────────┐
@@ -464,12 +464,12 @@ Two-column layout on desktop, stacked on mobile:
 └─────────────────┘  └─────────────────┘
 
 ┌────────────────────────────────────────┐
-│ Synthesis — Final Analysis             │
+│ Synthesis - Final Analysis             │
 │ [streaming…]                           │
 └────────────────────────────────────────┘
 ```
 
-**Right column (280 px fixed) — Progress + Activity**
+**Right column (280 px fixed) - Progress + Activity**
 
 ```
 ┌──────────────────────┐
@@ -496,7 +496,7 @@ Two-column layout on desktop, stacked on mobile:
 - Activity feed auto-scrolls, color-coded per agent
 - Monospace font for timestamps/types only
 
-### `app/result/[jobId]/page.tsx` — Final Report
+### `app/result/[jobId]/page.tsx` - Final Report
 
 ```
 ┌────────────────────────────────────────┐
@@ -516,7 +516,7 @@ Two-column layout on desktop, stacked on mobile:
 └─────────────────┘  └─────────────────┘
 
 ┌────────────────────────────────────────┐
-│ Synthesis — Executive Summary          │
+│ Synthesis - Executive Summary          │
 └────────────────────────────────────────┘
 
         [ Analyse another idea → ]
@@ -524,7 +524,7 @@ Two-column layout on desktop, stacked on mobile:
 
 ---
 
-## 5. API Client — `lib/api.ts`
+## 5. API Client - `lib/api.ts`
 
 ```typescript
 export const startValidation = async (idea: string): Promise<{ job_id: string }>
@@ -535,7 +535,7 @@ export const getResult = async (jobId: string): Promise<ResultData>
 
 ## 6. Build Order for Claude Code
 
-### Step 1 — Backend Core
+### Step 1 - Backend Core
 
 1. Create `backend/` structure
 2. Set up `pyproject.toml` with Ruff + Mypy config
@@ -546,10 +546,10 @@ export const getResult = async (jobId: string): Promise<ResultData>
 7. Implement `api/routes.py` (3 typed endpoints)
 8. Implement `agents/base.py` with full type annotations
 9. Implement one agent end-to-end (`market_agent`)
-10. Run `ruff check .` and `mypy .` — fix all errors
+10. Run `ruff check .` and `mypy .` - fix all errors
 11. Test SSE stream works with one agent
 
-### Step 2 — All Agents + Parallel
+### Step 2 - All Agents + Parallel
 
 1. Implement remaining 3 parallel agents
 2. Implement `core/orchestrator.py` with `asyncio.gather`
@@ -557,26 +557,26 @@ export const getResult = async (jobId: string): Promise<ResultData>
 4. Run `ruff check .` and `mypy .` on all agents
 5. Test full pipeline end-to-end
 
-### Step 3 — Frontend Foundation
+### Step 3 - Frontend Foundation
 
 1. Create `frontend/` with Next.js + Turbopack
 2. Run `npx shadcn@latest init` and add required components
-3. Set up Tailwind CSS variables (warm parchment theme — no dark class)
+3. Set up Tailwind CSS variables (warm parchment theme - no dark class)
 4. Implement `store/agentStore.ts` (Zustand)
 5. Implement `hooks/useAgentStream.ts`
 
-### Step 4 — UI Pages
+### Step 4 - UI Pages
 
 1. Build landing page (`app/page.tsx`)
 2. Build agent dashboard (`app/validate/page.tsx`)
 3. Build `components/analysis/AgentOutputCard.tsx` using shadcn `Card` + `Badge`
-4. Build `components/analysis/AgentProgressList.tsx` — sidebar agent status list
+4. Build `components/analysis/AgentProgressList.tsx` - sidebar agent status list
 5. Build `components/analysis/ActivityFeed.tsx` using shadcn `ScrollArea`
 6. Build `components/analysis/SynthesisOutput.tsx` using shadcn `Separator`
 7. Build `components/report/ValidationScore.tsx` using shadcn `Progress`
 8. Build result page (`app/result/[jobId]/page.tsx`)
 
-### Step 5 — Polish
+### Step 5 - Polish
 
 1. Add Framer Motion animations
 2. Agent warm box-shadow on active state
@@ -589,20 +589,20 @@ export const getResult = async (jobId: string): Promise<ResultData>
 
 ## 7. Key Rules for Claude Code
 
-- Use `asyncio.gather` for parallel agents — never run sequentially
+- Use `asyncio.gather` for parallel agents - never run sequentially
 - Every agent must emit `thinking` before starting
-- All backend functions must be fully type-annotated — Mypy strict must pass
+- All backend functions must be fully type-annotated - Mypy strict must pass
 - All backend code must pass `ruff check .` before commit
 - Use Loguru `logger.info` for agent lifecycle events, `logger.error` for failures
-- Use Pydantic `AgentEvent` model for every SSE event — never raw dicts
+- Use Pydantic `AgentEvent` model for every SSE event - never raw dicts
 - SSE connection must stay open until `system.done` event
 - Frontend must handle SSE reconnection on disconnect
-- Use shadcn primitives (Card, Badge, ScrollArea, Progress) — do not rebuild them
-- Turbopack must be enabled in `next.config.ts` — do not use webpack
-- Do not fake streaming — every token comes from real LLM stream
+- Use shadcn primitives (Card, Badge, ScrollArea, Progress) - do not rebuild them
+- Turbopack must be enabled in `next.config.ts` - do not use webpack
+- Do not fake streaming - every token comes from real LLM stream
 - Tool calls must be visible in UI as they happen
 - Synthesis agent only starts after ALL parallel agents emit `complete`
-- No placeholder data — everything is real LLM output
-- Theme is light (warm parchment) — never add `dark` class or dark-mode variables
+- No placeholder data - everything is real LLM output
+- Theme is light (warm parchment) - never add `dark` class or dark-mode variables
 - Fonts: Playfair Display (display), DM Sans (body), JetBrains Mono (data/logs only)
 - Custom components live in `components/analysis/` and `components/report/`

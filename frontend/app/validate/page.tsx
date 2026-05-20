@@ -35,7 +35,9 @@ function AnalysisDashboard() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#FBF8F3]">
         <div className="text-center">
-          <p className="text-[#B84D26] text-sm mb-4 font-sans">No active job — nothing to show here.</p>
+          <p className="text-[#B84D26] text-sm mb-4 font-sans">
+            No active job - nothing to show here.
+          </p>
           <button
             onClick={() => router.push("/")}
             className="text-[#9B6E2E] text-sm underline font-sans"
@@ -88,8 +90,7 @@ function AnalysisDashboard() {
 
       {/* Two-column layout: left 65% output, right 35% activity + status */}
       <div className="flex-1 min-h-0 grid grid-cols-1 gap-4 pb-4 lg:grid-cols-[1fr_280px]">
-
-        {/* Left — agent output cards */}
+        {/* Left - agent output cards */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -114,7 +115,7 @@ function AnalysisDashboard() {
           </div>
         </motion.div>
 
-        {/* Right — status list + activity feed stacked */}
+        {/* Right - status list + activity feed stacked */}
         <motion.div
           initial={{ opacity: 0, x: 12 }}
           animate={{ opacity: 1, x: 0 }}

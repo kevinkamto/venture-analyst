@@ -26,7 +26,9 @@ export default function LandingPage() {
       setJobId(job_id);
       router.push(`/validate?job=${job_id}`);
     } catch {
-      setError("Could not reach the analysis server. Please check that the backend is running.");
+      setError(
+        "Could not reach the analysis server. Please check that the backend is running.",
+      );
       setLoading(false);
     }
   };
@@ -56,8 +58,12 @@ export default function LandingPage() {
         className="absolute top-6 left-6 z-10 flex items-center gap-1.5"
       >
         <span className="inline-block h-2 w-2 rotate-45 bg-[#9B6E2E]" />
-        <span className="font-display text-sm italic font-semibold text-[#251A0E] leading-none">Venture</span>
-        <span className="font-sans text-sm font-medium text-[#5A4230] leading-none">Analyst</span>
+        <span className="font-display text-sm italic font-semibold text-[#251A0E] leading-none">
+          Venture
+        </span>
+        <span className="font-sans text-sm font-medium text-[#5A4230] leading-none">
+          Analyst
+        </span>
       </motion.div>
 
       <motion.div
@@ -96,9 +102,9 @@ export default function LandingPage() {
           transition={{ delay: 0.26 }}
           className="mb-9 text-center font-sans text-[#5A4230] text-base leading-relaxed"
         >
-          Describe the concept. Five analysts — market, competition, risk,
-          monetisation, synthesis — will scrutinise it in parallel and
-          return a scored verdict.
+          Describe the concept. Five analysts - market, competition, risk,
+          monetisation, synthesis - will scrutinise it in parallel and return a
+          scored verdict.
         </motion.p>
 
         {/* Form */}
@@ -117,9 +123,7 @@ export default function LandingPage() {
             disabled={loading}
           />
 
-          {error && (
-            <p className="text-sm text-[#B84D26] font-sans">{error}</p>
-          )}
+          {error && <p className="text-sm text-[#B84D26] font-sans">{error}</p>}
 
           <motion.button
             type="submit"
@@ -136,7 +140,9 @@ export default function LandingPage() {
             ) : (
               <span className="flex items-center justify-center gap-2">
                 Run the analysis
-                <span className="transition-transform group-hover:translate-x-0.5">→</span>
+                <span className="transition-transform group-hover:translate-x-0.5">
+                  →
+                </span>
               </span>
             )}
           </motion.button>

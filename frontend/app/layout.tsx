@@ -21,8 +21,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Venture Analyst — AI-powered startup evaluation",
-  description: "Evaluate your startup idea with five parallel AI agents covering market, competition, risk, monetisation, and synthesis.",
+  title: "Venture Analyst - AI-powered startup evaluation",
+  description:
+    "Evaluate your startup idea with five parallel AI agents covering market, competition, risk, monetisation, and synthesis.",
 };
 
 export default function RootLayout({
