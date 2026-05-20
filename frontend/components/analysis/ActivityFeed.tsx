@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAgentStore } from "@/store/agentStore";
 
 const AGENT_COLORS: Record<string, string> = {
@@ -33,8 +32,8 @@ export function ActivityFeed() {
   }, [logs.length]);
 
   return (
-    <div className="flex h-full flex-col rounded-xl border border-[#CDBFA3] bg-[#F3EDE0]">
-      <div className="flex items-center justify-between border-b border-[#E8DFC9] px-4 py-2.5">
+    <div className="flex flex-1 min-h-0 flex-col rounded-xl border border-[#CDBFA3] bg-[#F3EDE0] overflow-hidden">
+      <div className="flex-none flex items-center justify-between border-b border-[#E8DFC9] px-4 py-2.5">
         <span className="font-sans text-[11px] font-semibold text-[#967860] tracking-wide uppercase">
           Activity
         </span>
@@ -46,7 +45,7 @@ export function ActivityFeed() {
         )}
       </div>
 
-      <ScrollArea className="flex-1 px-3 py-2">
+      <div className="flex-1 min-h-0 overflow-y-auto px-3 py-2">
         <div className="space-y-0.5">
           <AnimatePresence initial={false}>
             {logs.map((log, i) => (
@@ -75,7 +74,7 @@ export function ActivityFeed() {
           </AnimatePresence>
           <div ref={bottomRef} />
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 }

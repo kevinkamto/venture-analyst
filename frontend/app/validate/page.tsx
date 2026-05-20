@@ -125,7 +125,7 @@ function AnalysisDashboard() {
           <div className="flex-none overflow-hidden">
             <AgentProgressList />
           </div>
-          <div className="flex-1 min-h-0 overflow-hidden">
+          <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
             <ActivityFeed />
           </div>
         </motion.div>
