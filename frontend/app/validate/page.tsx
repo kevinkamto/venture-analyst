@@ -120,9 +120,9 @@ function AnalysisDashboard() {
           initial={{ opacity: 0, x: 12 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
-          className="min-h-0 flex flex-col gap-3"
+          className="min-h-0 overflow-hidden flex flex-col gap-3"
         >
-          <div className="flex-none">
+          <div className="flex-none overflow-hidden">
             <AgentProgressList />
           </div>
           <div className="flex-1 min-h-0 overflow-hidden">

@@ -95,7 +95,7 @@ export function AgentProgressList() {
   const allKeys: AgentKey[] = [...PARALLEL_AGENTS, "synthesis"];
 
   return (
-    <div className="h-full rounded-xl border border-[#CDBFA3] bg-[#F3EDE0]">
+    <div className="rounded-xl border border-[#CDBFA3] bg-[#F3EDE0] overflow-hidden">
       <div className="flex items-center justify-between border-b border-[#E8DFC9] px-4 py-2.5">
         <span className="font-sans text-[11px] font-semibold text-[#967860] tracking-wide uppercase">
           Agents
@@ -106,7 +106,7 @@ export function AgentProgressList() {
           </span>
         )}
       </div>
-      <div className="px-4">
+      <div className="overflow-y-auto max-h-60 px-4">
         {allKeys.map((key) => (
           <AgentRow key={key} agent={key} />
         ))}
