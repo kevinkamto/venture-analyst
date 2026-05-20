@@ -248,32 +248,19 @@ export default function ResultPage({ params }: Props) {
           </span>
         </motion.div>
 
-        {/* Score */}
+        {/* Score hero */}
         <ValidationScore score={result.score} verdict={result.verdict} />
 
-        {/* Four sections 2×2 */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {sections.map(({ key, delay }) => (
-            <ReportSection
-              key={key}
-              label={SECTION_LABELS[key]}
-              content={result[key]}
-              color={SECTION_COLORS[key]}
-              delay={delay}
-            />
-          ))}
-        </div>
-
-        {/* Synthesis */}
+        {/* Executive Summary — conclusion first */}
         {result.synthesis && (
           <>
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.62 }}
+              transition={{ delay: 0.3 }}
               className="rounded-xl border border-[#9B6E2E]/25 bg-[#F3EDE0] p-6"
             >
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2.5">
                   <span className="h-2 w-2 rounded-full bg-[#9B6E2E]" />
                   <span className="font-sans text-xs font-semibold text-[#9B6E2E]">
@@ -288,7 +275,7 @@ export default function ResultPage({ params }: Props) {
                   <Expand size={13} />
                 </button>
               </div>
-              <div className="max-h-52 overflow-y-auto text-sm text-[#251A0E]">
+              <div className="max-h-52 overflow-y-auto text-sm text-[#251A0E] leading-relaxed">
                 <Markdown>{result.synthesis}</Markdown>
               </div>
             </motion.div>
@@ -306,12 +293,38 @@ export default function ResultPage({ params }: Props) {
           </>
         )}
 
+        {/* Supporting analysis label */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.45 }}
+          className="flex items-center gap-3"
+        >
+          <span className="font-sans text-[11px] font-semibold text-[#967860] tracking-widest uppercase">
+            Supporting Analysis
+          </span>
+          <div className="flex-1 h-px bg-[#E8DFC9]" />
+        </motion.div>
+
+        {/* Four sections 2×2 */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {sections.map(({ key, delay }) => (
+            <ReportSection
+              key={key}
+              label={SECTION_LABELS[key]}
+              content={result[key]}
+              color={SECTION_COLORS[key]}
+              delay={delay}
+            />
+          ))}
+        </div>
+
         {/* Action */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.75 }}
-          className="flex justify-center pt-2"
+          className="flex justify-center pt-4"
         >
           <button
             onClick={() => router.push("/")}
