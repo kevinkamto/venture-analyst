@@ -2,7 +2,15 @@
 
 > Five AI agents dissect your startup idea in parallel - market, competition, risk, monetisation, synthesis - and return a scored verdict in real time.
 
-![Landing - submit your idea](images/thumb.png)
+---
+
+## Screenshots
+
+![Landing — submit your idea](images/thumb.png)
+
+![Live dashboard — agents streaming in parallel](images/running.png)
+
+![Final report — scored verdict](images/ending.png)
 
 ---
 
@@ -24,8 +32,6 @@ idea submitted
 ```
 
 Events stream over SSE as they happen - thinking, tool calls, tokens, completion - so the UI updates live without polling.
-
-![Live dashboard — agents streaming in parallel](images/running.png)
 
 ---
 
@@ -61,8 +67,6 @@ Open `http://localhost:3000`.
 | Synthesis | Merges all outputs → score 0–100 | |
 
 ---
-
-![Final report - scored verdict](images/ending.png)
 
 ## API
 
