@@ -64,9 +64,7 @@ export function ActivityFeed() {
                 >
                   {AGENT_SHORT[log.agent] ?? log.agent}
                 </span>
-                <span className="shrink-0 w-[56px] text-[#967860]">
-                  {log.type}
-                </span>
+                <span className="shrink-0 w-14 text-[#967860]">{log.type}</span>
                 {log.type === "token" ? null : (
                   <span className="text-[#5A4230] truncate max-w-[140px]">
                     {log.message.slice(0, 80)}
