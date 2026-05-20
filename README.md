@@ -1,59 +1,105 @@
 # Venture Analyst
 
-AI-powered startup idea evaluation using five parallel agents.
+> Five AI agents dissect your startup idea in parallel — market, competition, risk, monetisation, synthesis — and return a scored verdict in real time.
 
-| Thumbnail                                         | Final Result                                       |
-| ------------------------------------------------- | -------------------------------------------------- |
-| ![Venture Analyst](images/thumb.png "Venture Analyst") | ![Venture Analyst](images/ending.png "Venture Analyst") |
+![Landing — submit your idea](images/thumb.png)
 
-## Stack
+---
 
-- **Backend:** FastAPI · Pydantic v2 · OpenAI · SSE-Starlette · Loguru · Ruff · Mypy · Tavily
-- **Frontend:** Next.js (App Router) · Turbopack · shadcn/ui · Tailwind · Zustand · Framer Motion
+## How it works
 
-## Quick Start
+Submit a one-line idea. Four specialist agents immediately fan out, each running concurrently and streaming their findings token by token. Once all four finish, a synthesis agent merges the outputs, scores the idea from 0–100, and issues a final verdict.
 
-### Prerequisites
-
-- Python 3.11+ and [`uv`](https://docs.astral.sh/uv/)
-- Node.js 18+ and [`pnpm`](https://pnpm.io/)
-- OpenAI and Tavily API keys
-
-### Backend
-
-```bash
-cd backend
-uv sync                        # install all deps from uv.lock
-uv sync --group dev            # also install ruff + mypy
-cp .env.example .env           # then fill in your keys
-uv run uvicorn main:app --reload
+```
+idea submitted
+      │
+      ├─── Market Research  ──┐
+      ├─── Competitor Intel ──┤  (parallel)
+      ├─── Risk Assessment  ──┤
+      └─── Monetisation     ──┘
+                               │
+                         Synthesis
+                               │
+                         score + verdict
 ```
 
-### Frontend
+Events stream over SSE as they happen — thinking, tool calls, tokens, completion — so the UI updates live without polling.
+
+---
+
+## Running locally
+
+**You need:** Python 3.11+, [`uv`](https://docs.astral.sh/uv/), Node.js 18+, [`pnpm`](https://pnpm.io/), and API keys for OpenAI and Tavily.
 
 ```bash
+# 1. Backend
+cd backend
+cp .env.example .env          # add OPENAI_API_KEY and TAVILY_API_KEY
+uv sync --group dev
+uv run uvicorn main:app --reload
+
+# 2. Frontend (new terminal)
 cd frontend
 pnpm install
 pnpm dev
 ```
 
-Visit `http://localhost:3000`.
+Open `http://localhost:3000`.
 
-## Environment
+---
 
-```env
-# backend/.env
-OPENAI_API_KEY=your_key
-TAVILY_API_KEY=your_key
+## Agents
+
+| Agent | What it investigates | Searches the web |
+|---|---|:---:|
+| Market Research | TAM, trends, target users | ✓ |
+| Competitor Intel | Top competitors, positioning gaps | ✓ |
+| Risk Assessment | Legal, technical, execution risks | |
+| Monetisation | Revenue models, pricing channels | |
+| Synthesis | Merges all outputs → score 0–100 | |
+
+---
+
+![Final report — scored verdict](images/ending.png)
+
+## API
+
+Three endpoints, nothing more:
+
+```
+POST /api/validate           { idea }  →  { job_id }
+GET  /api/stream/{job_id}              →  SSE stream
+GET  /api/result/{job_id}              →  scored result
 ```
 
-## Project Structure
+Every SSE event is a flat JSON object:
+
+```json
+{ "agent": "market_research", "type": "token", "data": "..." }
+```
+
+Event types in order: `thinking` → `tool_call` → `tool_result` → `token` → `complete`. The stream closes on `system.done`.
+
+---
+
+## Stack
+
+**Backend** — FastAPI · Uvicorn · Pydantic v2 · OpenAI · SSE-Starlette · Tavily · Loguru · Ruff · Mypy
+
+**Frontend** — Next.js App Router · Turbopack · shadcn/ui · Tailwind CSS · Zustand · Framer Motion
+
+---
+
+## Project layout
 
 ```
 backend/
-├── main.py                   # FastAPI entry point
-├── pyproject.toml            # project metadata + uv deps + ruff/mypy config
-├── lint.py                   # ruff check --fix, ruff format, mypy
+├── main.py                   ← FastAPI app + CORS + Loguru
+├── api/routes.py             ← three endpoints
+├── core/
+│   ├── orchestrator.py       ← asyncio.gather fan-out
+│   ├── streaming.py          ← SSE helpers
+│   └── job_store.py          ← in-memory job registry
 ├── agents/
 │   ├── base.py
 │   ├── market_agent.py
@@ -61,72 +107,27 @@ backend/
 │   ├── risk_agent.py
 │   ├── monetisation_agent.py
 │   └── synthesis_agent.py
-├── core/
-│   ├── orchestrator.py
-│   ├── job_store.py
-│   └── streaming.py
-├── api/
-│   └── routes.py
-└── schemas/
-    ├── events.py
-    ├── requests.py
-    └── responses.py
+└── schemas/                  ← Pydantic event / request / response models
 
 frontend/
 ├── app/
-│   ├── page.tsx                      # Landing
-│   ├── validate/page.tsx             # Live analysis dashboard
-│   └── result/[jobId]/page.tsx       # Final report
-├── components/
-│   ├── analysis/
-│   │   ├── AgentOutputCard.tsx
-│   │   ├── AgentProgressList.tsx
-│   │   ├── ActivityFeed.tsx
-│   │   └── SynthesisOutput.tsx
-│   ├── report/
-│   │   └── ValidationScore.tsx
-│   └── Markdown.tsx
-├── store/agentStore.ts               # Zustand state
-└── hooks/useAgentStream.ts           # SSE client
+│   ├── page.tsx              ← landing + idea input
+│   ├── validate/page.tsx     ← live streaming dashboard
+│   └── result/[jobId]/       ← final scored report
+├── components/analysis/      ← AgentOutputCard, ActivityFeed, SynthesisOutput …
+├── components/report/        ← ValidationScore
+├── hooks/useAgentStream.ts   ← EventSource → Zustand
+└── store/agentStore.ts       ← global state
 ```
 
-## API
+---
 
-| Method | Path                     | Description                  |
-| ------ | ------------------------ | ---------------------------- |
-| POST   | `/api/validate`        | Submit idea →`{ job_id }` |
-| GET    | `/api/stream/{job_id}` | SSE stream of agent events   |
-| GET    | `/api/result/{job_id}` | Final scored result          |
-
-SSE event shape: `{ "agent": "market_research", "type": "token", "data": "..." }`
-
-## Agents
-
-| Agent           | Focus                                | Web Search |
-| --------------- | ------------------------------------ | ---------- |
-| Market Research | Market size, TAM, trends             | Yes        |
-| Competitor      | Top competitors, positioning gaps    | Yes        |
-| Risk            | Legal, technical, execution risks    | No         |
-| Monetisation    | Revenue models, pricing strategy     | No         |
-| Synthesis       | Merge outputs, score 0–100, verdict | No         |
-
-The four analysis agents run in parallel via `asyncio.gather`. Synthesis starts only after all four emit `complete`.
-
-## Code Quality
+## Linting
 
 ```bash
-# from backend/
-uv run python lint.py     # ruff check --fix + ruff format + mypy
+# backend — ruff + mypy in one shot
+cd backend && uv run python lint.py
 
-# from frontend/
-pnpm lint                 # ESLint
+# frontend — ESLint
+cd frontend && pnpm lint
 ```
-
-## Architecture
-
-1. User submits an idea — `POST /api/validate` returns a `job_id`
-2. Orchestrator spawns four agents concurrently
-3. Each agent emits SSE events (thinking → tool_call → token → complete)
-4. Frontend subscribes via `EventSource`, updates Zustand store in real time
-5. Synthesis agent runs once all four parallel agents are complete
-6. Final scored result available at `GET /api/result/{job_id}`
