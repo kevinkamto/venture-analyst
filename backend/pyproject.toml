@@ -1,3 +1,25 @@
+[project]
+name = "venture-analyst-backend"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.136.1",
+    "uvicorn[standard]>=0.46.0",
+    "python-dotenv>=1.2.2",
+    "openai>=2.36.0",
+    "httpx>=0.28.1",
+    "sse-starlette>=3.4.3",
+    "tavily-python>=0.7.24",
+    "pydantic>=2.0",
+    "loguru>=0.7.3",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.12",
+    "mypy>=2.0.0",
+]
+
 [tool.ruff]
 line-length = 88
 
@@ -12,18 +34,3 @@ quote-style = "double"
 python_version = "3.11"
 strict = true
 ignore_missing_imports = true
-
-[dependency-groups]
-dev = [
-    "fastapi>=0.136.1",
-    "httpx>=0.28.1",
-    "loguru>=0.7.3",
-    "mypy>=2.0.0",
-    "openai>=2.36.0",
-    "pydantic>=2.0",
-    "python-dotenv>=1.2.2",
-    "ruff>=0.15.12",
-    "sse-starlette>=3.4.3",
-    "tavily-python>=0.7.24",
-    "uvicorn[standard]>=0.46.0",
-]
